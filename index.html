@@ -27,9 +27,9 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2>Bienvenidos</h2>
+        <h1>Bienvenidos</h1>
 
-<p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a> y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+<p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
 
 <p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/e393a5db8f242bb9b173f570fdd06554be5aa968/HTK/spike%20digitos?at=master">repositorio.</a></p>
 
@@ -53,9 +53,11 @@
 
 <h2>Preparando el entorno</h2>
 
+<h3>Software</h3>
+
 <p>Para poder generar nuestro reconocedor, primero debemos instalar <a href="http://htk.eng.cam.ac.uk/download.shtml">The Hidden Markov Model Toolkit (HTK)</a>. La forma de instalarlo depende de nuestro sistema operativo:</p>
 
-<h3>HTK en Ubuntu</h3>
+<p><strong>HTK en Ubuntu</strong></p>
 
 <p>Dentro de la carpeta descargada: </p>
 
@@ -73,15 +75,13 @@ sudo apt-get install libx11-dev
 
 <p>(si fue necesario realizar el ultimo paso, no dispondremos de la herramienta HSLab, reemplazable por, por ejemplo, audacity)</p>
 
-<h3>HTK en MAC (Mountain Lion)</h3>
+<p><strong>HTK en MAC (Mountain Lion)</strong></p>
 
 <p>Instalar XQuartz</p>
 
-<p>Instalar HTK usando los consejos que se dan en la esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen (próximamente agregaré los comandos en esta guía)</p>
+<p>Instalar HTK usando los consejos que se dan en la esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen (próximamente agregaré los comandos en esta guía). Básicamente, indica que hay que agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib.</p>
 
-<p>Básicamente, indica que hay que agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib.</p>
-
-<h3>Otros</h3>
+<p><strong>Ruby</strong></p>
 
 <p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) </p>
 
