@@ -87,6 +87,10 @@ sudo apt-get install libx11-dev
 
 <p><a href="https://dl.dropboxusercontent.com/u/43547597/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
 
+<h3>Sobre el formato de los archivos</h3>
+
+<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a> por ejemplo)</p>
+
 <h2>Primer Parte: Preparando los datos</h2>
 
 <h3>Paso 1: Gramática</h3>
@@ -97,6 +101,7 @@ sudo apt-get install libx11-dev
 
 <pre><code>$digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
+
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a></p>
@@ -107,7 +112,43 @@ sudo apt-get install libx11-dev
 
 <h3>Paso 2: Listado de palabras</h3>
 
+<p>En este paso debemos listar todas las posibles palabras de nuestra gramática (ordenadas alfabeticamente). Para ello, podemos listarlas y luego aplicar el comando "sort" de unix. </p>
+
+<pre><code>CERO
+CINCO
+CUATRO
+DOS
+NUEVE
+OCHO
+SEIS
+SENT-END
+SENT-START
+SIETE
+TRES
+UNO
+
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5372970">words-sorted.list</a></p>
+
 <h3>Paso 3: Diccionario de fonemas</h3>
+
+<pre><code>CERO s e r o sp
+CINCO s i n c o sp
+CUATRO k u a t r o sp
+DOS d o s sp
+NUEVE n u e b e sp
+OCHO o ch o sp
+SEIS s e i s sp
+SENT-END sil
+SENT-START sil
+SIETE s i e t e sp
+TRES t r e s sp
+UNO u n o sp
+
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5373011">dict</a></p>
 
 <h2>Segunda Parte: Generando el modelo</h2>
 
