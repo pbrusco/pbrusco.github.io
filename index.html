@@ -47,13 +47,13 @@
 
 <p>La tarea de reconocimiento del habla (speech recognition) se basa en .. </p>
 
-<p>modelos ...</p>
+<p>Teoría...</p>
 
-<p>hmms ..</p>
-
-<h3>Teoría detrás</h3>
+<p>Software ...</p>
 
 <h2>Preparando el entorno</h2>
+
+<p>Para poder generar nuestro reconocedor, primero debemos instalar The Hidden Markov Model Toolkit (HTK)</p>
 
 <h3>HTK en Ubuntu</h3>
 
@@ -68,8 +68,10 @@ sudo make install
 
 <pre><code>sudo apt-get install gcc-multilib
 sudo apt-get install libx11-dev
-./configure --disable-hslab (por un error -lX11) (utilizar audacity para grabar en vez de hslab con labeling)
+./configure --disable-hslab (por un error -lX11) 
 </code></pre>
+
+<p>(si fue necesario realizar el ultimo paso, no dispondremos de la herramienta HSLab, reemplazable por, por ejemplo, audacity)</p>
 
 <h3>HTK en MAC (Mountain Lion)</h3>
 
