@@ -95,9 +95,11 @@ sudo apt-get install libx11-dev
 
 <p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a>: View/Line Endings/Unix por ejemplo)</p>
 
-<h2>Primer Parte: Preparando los datos</h2>
+<hr><h1>Implementación</h1>
 
-<h3>Paso 1: Gramática</h3>
+<h2>1. Preparando los datos</h2>
+
+<h3>1.1. Gramática</h3>
 
 <p>Para que nuestro programa entienda palabras, lo primero que debemos indicarle es que forma pueden tener las oraciones que grabemos.</p>
 
@@ -113,7 +115,7 @@ sudo apt-get install libx11-dev
 
 <p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
 
-<h3>Paso 2: Listado de palabras</h3>
+<h3>1.2. Listado de palabras</h3>
 
 <p>En este paso debemos listar todas las posibles palabras de nuestra gramática (ordenadas alfabeticamente). Para ello, podemos listarlas y luego aplicar el comando "sort" de unix. </p>
 
@@ -133,7 +135,7 @@ UNO
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/words-sorted.list?at=master">Dictionary/DictionarySources/words-sorted.list</a></p>
 
-<h3>Paso 3: Diccionario de fonemas</h3>
+<h3>1.3. Diccionario de fonemas</h3>
 
 <pre><code>CERO s e r o sp
 CINCO s i n c o sp
@@ -151,7 +153,7 @@ UNO u n o sp
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
 
-<h3>Paso 4: Grabando datos de entrenamiento</h3>
+<h3>1.4. Grabando datos de entrenamiento</h3>
 
 <p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios) </p>
 
@@ -173,9 +175,9 @@ UNO u n o sp
 
 <p>Este scipt escanea Data/Recorded/waves/train en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav y los guarda en el la carpeta del segundo parametro "Data/Train/" con el nombre -.lab (ejemplo el archivo train1-8.lab mostrado anteriormente)</p>
 
-<h2>Segunda Parte: Combinando los datos</h2>
+<h2>2. Combinando los datos</h2>
 
-<h3>Diccionario y listado de fonemas</h3>
+<h3>2.1. Diccionario y listado de fonemas</h3>
 
 <p>Para generar el diccionario y listado de fonemas que utilizaremos más adelante, usaremos el comando HDMan de HTK: </p>
 
@@ -188,14 +190,14 @@ UNO u n o sp
 
 <p>Luego, debemos crear un nuevo archivo copiando Dictionary/phones-with-sp.list en el cual borremos la linea que contiene al fonema "sp", generando así el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a></p>
 
-<h3>Gramática a WordNet</h3>
+<h3>2.2. Gramática a WordNet</h3>
 
 <p>HTK utiliza un formato especial para representar la gramática, es un "word network" (red de palabras), básicamente, es una notación de bajo nivel llamada "HTK Standard Lattice Format (SLF)" en el cual, cada instancia de palabra y cada transición entre palabras esta listado explicitamente. Podemos crear esta red automaticamente utilizando el comando</p>
 
 <pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet 
 </code></pre>
 
-<h3>Master label files (mlf)</h3>
+<h3>2.3. Master label files (mlf)</h3>
 
 <p>Create "MFCCs words.mlf"</p>
 
@@ -223,7 +225,7 @@ UNO u n o sp
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
 
-<h3>Preparando la estructura para el modelo</h3>
+<h3>2.4. Preparando la estructura para el modelo</h3>
 
 <p>Create directories for models:</p>
 
@@ -233,16 +235,16 @@ do
 done
 </code></pre>
 
-<h3>Listado de archivos de entrenamiento para HCompV</h3>
+<h3>2.5. Listado de archivos de entrenamiento para HCompV</h3>
 
 <p>Generate HCompV.script file:</p>
 
 <pre><code>irb Helpers/generate_hcompv_script.rb
 </code></pre>
 
-<h2>Tercer Parte: Entrenamiento del modelo</h2>
+<h2>3. Entrenamiento del modelo</h2>
 
-<h3>Hmm0 - Hmm3</h3>
+<h3>3.1. Hmm0 - Hmm3</h3>
 
 <p>Train first prototype model into hmm0 folder:</p>
 
@@ -264,7 +266,7 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
 </code></pre>
 
-<h3>Hmm4 - Hmm7</h3>
+<h3>3.2. Hmm4 - Hmm7</h3>
 
 <p>(After adding the new "sp" state after copying from hmm3 to hmm4 and adding sp using center state of sil) (<a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7</a>)</p>
 
@@ -275,11 +277,11 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones-with-sp.list
 </code></pre>
 
-<h2>Cuarta Parte: Resultados</h2>
+<h2>4. Resultados</h2>
 
-<h3>Grabar datos para testear</h3>
+<h3>4.1. Grabar datos para testear</h3>
 
-<h3>Generar vectores MFCC</h3>
+<h3>4.2. Generar vectores MFCC</h3>
 
 <p>Test models: 
 Generate tests MFCCs:</p>
@@ -294,7 +296,7 @@ Generate tests MFCCs:</p>
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
 
-<h3>Obtener resultados en vivo</h3>
+<h3>4.3. Obtener resultados en vivo</h3>
 
 <p>Live Results:</p>
 
