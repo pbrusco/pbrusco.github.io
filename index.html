@@ -59,7 +59,9 @@ etc</p>
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
-<h2>Primer Parte: Preparando los datos.</h2>
+<p><a href="https://dl.dropboxusercontent.com/u/43547597/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+
+<h2>Primer Parte: Preparando los datos</h2>
 
 <h3>Paso 1: Gramática</h3>
 
@@ -71,12 +73,17 @@ etc</p>
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a>
-Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">formato</a></p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a></p>
+
+<p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">formato</a></p>
 
 <p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
 
-<h3>Paso 2: Diccionario y listados de fonemas</h3>
+<h3>Paso 2: Listado de palabras</h3>
+
+<h3>Paso 3: Diccionario de fonemas</h3>
+
+<h2>Segunda Parte: Generando el modelo</h2>
 
 <p>Create the phones dictionary and list:</p>
 
