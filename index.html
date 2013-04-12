@@ -41,19 +41,43 @@
 
 <h3>Salida</h3>
 
-<p>12151516790</p>
+<p>"1 2 1 5 1 5 1 6 7 9 0"</p>
 
 <h2>Preámbulos</h2>
 
 <p>La tarea de reconocimiento del habla (speech recognition) se basa en .. </p>
 
-<p>modelos ...
-markov ...
-etc</p>
+<p>modelos ...</p>
+
+<p>hmms ..</p>
 
 <h3>Teoría detrás</h3>
 
 <h3>Preparando el entorno</h3>
+
+<h2>HTK-Ubuntu</h2>
+
+<p>Descargar <a href="http://htk.eng.cam.ac.uk/download.shtml">The Hidden Markov Model Toolkit (HTK)</a>, luego, dentro de la carpeta descargada: </p>
+
+<pre><code> ./configure
+make all
+sudo make install
+</code></pre>
+
+<p>Solución posible de algunos problemas probables:</p>
+
+<pre><code>sudo apt-get install gcc-multilib
+sudo apt-get install libx11-dev
+./configure --disable-hslab (por un error -lX11) (utilizar audacity para grabar en vez de hslab con labeling)
+</code></pre>
+
+<h2>HTK-MAC (Mountain Lion)</h2>
+
+<p>Instalar XQuartz</p>
+
+<p>Instalar HTK usando los consejos que se dan en la esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen (próximamente agregaré los comandos en esta guía)</p>
+
+<p>Básicamente, indica que hay que agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib.</p>
 
 <h3>Organización del código</h3>
 
