@@ -29,7 +29,9 @@
       <section id="main_content" class="inner">
         <h2>Tarea</h2>
 
-<p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a> y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a> </p>
+<p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a> y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+
+<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/e393a5db8f242bb9b173f570fdd06554be5aa968/HTK/spike%20digitos?at=master">repositorio.</a></p>
 
 <h3>Hacia dónde vamos?</h3>
 
@@ -103,7 +105,7 @@ sudo apt-get install libx11-dev
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">spike digitos/Dictionary/DictionarySources/grammar</a>
 Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
 <p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
@@ -126,7 +128,7 @@ TRES
 UNO
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5372970">words-sorted.list</a></p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5372970">spike digitos/Dictionary/DictionarySources/words-sorted.list</a></p>
 
 <h3>Paso 3: Diccionario de fonemas</h3>
 
@@ -144,7 +146,7 @@ TRES t r e s sp
 UNO u n o sp
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5373011">dict</a></p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5373011">spike digitos/Dictionary/DictionarySources/dict</a></p>
 
 <h3>Paso 4: Grabando datos de entrenamiento</h3>
 
