@@ -45,6 +45,12 @@
 
 <h2>Preámbulos</h2>
 
+<p>La tarea de reconocimiento del habla (speech recognition) se basa en .. </p>
+
+<p>modelos ...
+markov ...
+etc</p>
+
 <h3>Teoría detrás</h3>
 
 <h3>Preparando el entorno</h3>
@@ -59,15 +65,18 @@
 
 <p>Para que nuestro programa entienda palabras, lo primero que debemos indicarle es que forma pueden tener las oraciones que grabemos.</p>
 
-<p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente gramática (llamaremos a este archivo <code>grammar</code>:</p>
+<p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
 
 <pre><code>$digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
 </code></pre>
 
-<p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán la pinta: </p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a>
+Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">formato</a></p>
 
-<p>Digito1, Digito2, etc donde cada dígito está entre cero y nueve. </p>
+<p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
+
+<h3>Paso 2: Diccionario y listados de fonemas</h3>
 
 <p>Create the phones dictionary and list:</p>
 
