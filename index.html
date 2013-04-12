@@ -37,7 +37,7 @@
 
 <h3>Entrada</h3>
 
-<p><img src="https://dl.dropboxusercontent.com/u/43547597/12151516790.png" alt="12151516790"></p>
+<p><img src="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/12151516790.png" alt="12151516790"></p>
 
 <h3>Salida</h3>
 
@@ -85,11 +85,11 @@ sudo apt-get install libx11-dev
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
-<p><a href="https://dl.dropboxusercontent.com/u/43547597/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+<p><a href="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
 
 <h3>Sobre el formato de los archivos</h3>
 
-<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a> por ejemplo)</p>
+<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a>: view-line endings-unix por ejemplo)</p>
 
 <h2>Primer Parte: Preparando los datos</h2>
 
@@ -101,12 +101,10 @@ sudo apt-get install libx11-dev
 
 <pre><code>$digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
-
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a></p>
-
-<p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">formato</a></p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">grammar</a>
+Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
 <p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
 
@@ -126,7 +124,6 @@ SENT-START
 SIETE
 TRES
 UNO
-
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5372970">words-sorted.list</a></p>
@@ -145,12 +142,17 @@ SENT-START sil
 SIETE s i e t e sp
 TRES t r e s sp
 UNO u n o sp
-
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5373011">dict</a></p>
 
-<h2>Segunda Parte: Generando el modelo</h2>
+<h3>Paso 4: Grabando datos de entrenamiento</h3>
+
+<p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios) </p>
+
+<p>Ejemplo: </p>
+
+<h2>Segunda Parte: Combinando los datos</h2>
 
 <p>Create the phones dictionary and list:</p>
 
