@@ -89,7 +89,7 @@ sudo apt-get install libx11-dev
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
-<p><a href="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/dff4b6c3e0a6/HTK/spike%20digitos/code_organization.txt?at=master">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
 
 <h3>Sobre el formato de los archivos</h3>
 
@@ -175,18 +175,22 @@ UNO u n o sp
 
 <h2>Segunda Parte: Combinando los datos</h2>
 
-<h2>Diccionario y listado de fonemas</h2>
+<h3>Diccionario y listado de fonemas</h3>
 
 <p>Para generar el diccionario y listado de fonemas que utilizaremos más adelante, usaremos el comando HDMan de HTK: </p>
 
-<pre><code>HDMan -m -w Dictionary/DictionarySources/words-sorted.list -n Dictionary/phones.list -l dlog Dictionary/phones.dict Dictionary/DictionarySources/dict
+<pre><code>HDMan -m -w Dictionary/DictionarySources/words-sorted.list -n Dictionary/phones-with-sp.list -l dlog Dictionary/phones.dict Dictionary/DictionarySources/dict
 </code></pre>
 
-<p>Esto último, genera 2 archivos importantes: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
+<p>Esto último, genera 2 archivos importantes: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones-with-sp.list?at=master">Dictionary/phones-with-sp.list</a>, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
 
-<p>Remove sp from phones.list and create another file including it (phones-with-sp.list)</p>
+<p>Podrán notar que phones.dict y DictionarySources/dict son muy parecidos (o iguales en este caso), la razón para que esto ocurra es que dict es usado como source para generar phones.dict, y solo se toma de él las palabras que aparecen en word-sorted.list. Es decir, sería totalmente posible tener un diccionario dict con muchas más traducciones palabra-fonemas como source. </p>
 
-<p>Convert the grammar into a wordnet format:</p>
+<p>Luego, debemos crear un nuevo archivo copiando Dictionary/phones-with-sp.list en el cual borremos la linea que contiene al fonema "sp", generando así el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a></p>
+
+<h3>Gramática a WordNet</h3>
+
+<p>HTK utiliza un formato especial para representar la gramática, el el llamado </p>
 
 <pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet 
 </code></pre>
