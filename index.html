@@ -81,6 +81,10 @@ sudo apt-get install libx11-dev
 
 <p>Básicamente, indica que hay que agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib.</p>
 
+<h3>Otros</h3>
+
+<p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) </p>
+
 <h3>Organización del código</h3>
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
@@ -103,7 +107,7 @@ sudo apt-get install libx11-dev
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/grammar?at=master">spike digitos/Dictionary/DictionarySources/grammar</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/grammar?at=master">Dictionary/DictionarySources/grammar</a></p>
 
 <p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
@@ -127,7 +131,7 @@ TRES
 UNO
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/words-sorted.list?at=master">spike digitos/Dictionary/DictionarySources/words-sorted.list</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/words-sorted.list?at=master">Dictionary/DictionarySources/words-sorted.list</a></p>
 
 <h3>Paso 3: Diccionario de fonemas</h3>
 
@@ -145,13 +149,13 @@ TRES t r e s sp
 UNO u n o sp
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">spike digitos/Dictionary/DictionarySources/dict</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
 
 <h3>Paso 4: Grabando datos de entrenamiento</h3>
 
 <p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios) </p>
 
-<p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train1/6.wav?at=master">spike digitos/Data/Recorded/waves/train/train1/6.wav</a></p>
+<p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train1/6.wav?at=master">Data/Recorded/waves/train/train1/6.wav</a></p>
 
 <p>Por otro lado, cada uno de estos datos de entrenamiento necesitan una transcripción (.lab), esta transcripción debe contener los fonemas que se utilizan en la palabra grabada. </p>
 
@@ -160,9 +164,9 @@ UNO u n o sp
 <pre><code>0.0 0.5064375  o ch o
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train1-8.lab?at=master">spike digitos/Data/Train/train1-8.lab</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train1-8.lab?at=master">Data/Train/train1-8.lab</a></p>
 
-<p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers/labels_from_wavs_script.rb?at=master">spike digitos/Helpers/labels_from_wavs_script.rb</a></p>
+<p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
 
 <pre><code>irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
@@ -171,10 +175,14 @@ UNO u n o sp
 
 <h2>Segunda Parte: Combinando los datos</h2>
 
-<p>Create the phones dictionary and list:</p>
+<h2>Diccionario y listado de fonemas</h2>
+
+<p>Para generar el diccionario y listado de fonemas que utilizaremos más adelante, usaremos el comando HDMan de HTK: </p>
 
 <pre><code>HDMan -m -w Dictionary/DictionarySources/words-sorted.list -n Dictionary/phones.list -l dlog Dictionary/phones.dict Dictionary/DictionarySources/dict
 </code></pre>
+
+<p>Esto último, genera 2 archivos importantes: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
 
 <p>Remove sp from phones.list and create another file including it (phones-with-sp.list)</p>
 
