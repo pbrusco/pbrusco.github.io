@@ -190,10 +190,12 @@ UNO u n o sp
 
 <h3>Gramática a WordNet</h3>
 
-<p>HTK utiliza un formato especial para representar la gramática, el el llamado </p>
+<p>HTK utiliza un formato especial para representar la gramática, es un "word network" (red de palabras), básicamente, es una notación de bajo nivel llamada "HTK Standard Lattice Format (SLF)" en el cual, cada instancia de palabra y cada transición entre palabras esta listado explicitamente. Podemos crear esta red automaticamente utilizando el comando</p>
 
 <pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet 
 </code></pre>
+
+<h3>Master label files (mlf)</h3>
 
 <p>Create "MFCCs words.mlf"</p>
 
@@ -207,15 +209,21 @@ UNO u n o sp
 <pre><code>HLEd -l ’*’ -d Dictionary/phones.dict -i Data/train\ MFCCs-phones.mlf Configs/HLEd.config Data/train\ MFCCs-words.mlf
 </code></pre>
 
+<h3>Listado de archivos de entrenamiento para HCopy</h3>
+
 <p>Generate HCopy.script </p>
 
 <pre><code>irb Helpers/generate_hcopy_script.rb
 </code></pre>
 
+<h3>Mel Frequency Cepstral Coefficients</h3>
+
 <p>Generate MFCCs from wavs:</p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
+
+<h3>Preparando la estructura para el modelo</h3>
 
 <p>Create directories for models:</p>
 
@@ -225,10 +233,16 @@ do
 done
 </code></pre>
 
+<h3>Listado de archivos de entrenamiento para HCompV</h3>
+
 <p>Generate HCompV.script file:</p>
 
 <pre><code>irb Helpers/generate_hcompv_script.rb
 </code></pre>
+
+<h2>Tercer Parte: Entrenamiento del modelo</h2>
+
+<h3>Hmm0 - Hmm3</h3>
 
 <p>Train first prototype model into hmm0 folder:</p>
 
@@ -250,6 +264,8 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
 </code></pre>
 
+<h3>Hmm4 - Hmm7</h3>
+
 <p>(After adding the new "sp" state after copying from hmm3 to hmm4 and adding sp using center state of sil) (<a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7</a>)</p>
 
 <pre><code>HHEd -A -D -T 1 -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Configs/HHEd.config Dictionary/phones-with-sp.list
@@ -259,16 +275,26 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones-with-sp.list
 </code></pre>
 
+<h2>Cuarta Parte: A Probar Resultados</h2>
+
+<h3>Grabar datos para testear</h3>
+
+<h3>Generar vectores MFCC</h3>
+
 <p>Test models: 
 Generate tests MFCCs:</p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopyTests.config -S Scripts/HCopyTests.script
 </code></pre>
 
+<h3>Obtener resultados</h3>
+
 <p>Results:</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
+
+<h3>Obtener resultados en vivo</h3>
 
 <p>Live Results:
 HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list</p>
