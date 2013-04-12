@@ -35,15 +35,13 @@
 
 <h3>Hacia dónde vamos?</h3>
 
-<p>La idea de este tutorial es lograr, a partir de grabaciones de audio que contienen dígitos (solo dígitos),  obtener la transcripción de salida. </p>
+<p>La idea de este tutorial es lograr, a partir de grabaciones de audio que contienen dígitos (solo dígitos),  obtener la transcripción de </p>
 
-<h3>Entrada</h3>
+<p><strong>Entrada</strong>
+ <img src="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/12151516790.png" alt="12151516790"></p>
 
-<p><img src="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/12151516790.png" alt="12151516790"></p>
-
-<h3>Salida</h3>
-
-<p>"1 2 1 5 1 5 1 6 7 9 0"</p>
+<p><strong>Salida</strong>
+"1 2 1 5 1 5 1 6 7 9 0"</p>
 
 <h2>Preámbulos</h2>
 
@@ -105,8 +103,9 @@ sudo apt-get install libx11-dev
 ( SENT-START ( &lt;$digito&gt; ) SENT-END )
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">spike digitos/Dictionary/DictionarySources/grammar</a>
-Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
+<p>Nombre del archivo: <a href="https://gist.github.com/pbrusco/5368750">spike digitos/Dictionary/DictionarySources/grammar</a></p>
+
+<p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
 <p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
 
@@ -153,6 +152,8 @@ UNO u n o sp
 <p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios) </p>
 
 <p>Ejemplo: <a href="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/6.wav">spike digitos/Data/Recorded/waves/train/train1/6.wav</a></p>
+
+<p>Por otro lado, cada uno de estos datos de entrenamiento necesitan una transcripción (.lab), esta transcripción debe contener los fonemas que se utilizan en la palabra grabada. Por el momento no nos preocuparemos ya que tenemos un script que se encargará de facilitarnos ese trabajo, pero en caso de no tener este script, habría que construirlos manualmente.</p>
 
 <h2>Segunda Parte: Combinando los datos</h2>
 
