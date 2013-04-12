@@ -57,8 +57,6 @@
 
 <p>Para poder generar nuestro reconocedor, primero debemos instalar <a href="http://htk.eng.cam.ac.uk/download.shtml">The Hidden Markov Model Toolkit (HTK)</a>. La forma de instalarlo depende de nuestro sistema operativo:</p>
 
-<p><strong>HTK en Ubuntu</strong></p>
-
 <p>Dentro de la carpeta descargada: </p>
 
 <pre><code> ./configure
@@ -66,7 +64,9 @@ make all
 sudo make install
 </code></pre>
 
-<p>Solución posible de algunos problemas probables:</p>
+<p><strong>HTK en Ubuntu</strong></p>
+
+<p>Ante algún problema, ejecutar:</p>
 
 <pre><code>sudo apt-get install gcc-multilib
 sudo apt-get install libx11-dev
@@ -77,11 +77,13 @@ sudo apt-get install libx11-dev
 
 <p><strong>HTK en MAC (Mountain Lion)</strong></p>
 
-<p>Instalar <a href="http://xquartz.macosforge.org/landing/">XQuartz</a> </p>
+<p>Ante algún problema, asegurarse de tener instalado:</p>
 
-<p>Agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib.</p>
-
-<p>utilizé los consejos que se dan en esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen.</p>
+<ul>
+<li>
+<a href="http://xquartz.macosforge.org/landing/">XQuartz</a> (del cual necesitamos X11)</li>
+<li>gcc, disponible con los <a href="http://www.programadorfreelanceargentina.com/2012/05/como-instalar-xcode-command-line-tools.html">Command Line Tools</a> de XCode </li>
+</ul><p>Si el problema persiste, agregar -I/usr/X11R6/include en los cflags de los makefiles que estan, en el directorio de htk y en htklib, (información sacada de esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, para leerla, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen). </p>
 
 <p><strong>Ruby</strong></p>
 
