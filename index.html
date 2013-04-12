@@ -27,7 +27,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2>Tarea</h2>
+        <h2>Bienvenidos</h2>
 
 <p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a> y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
 
@@ -275,7 +275,7 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones-with-sp.list
 </code></pre>
 
-<h2>Cuarta Parte: A Probar Resultados</h2>
+<h2>Cuarta Parte: Resultados</h2>
 
 <h3>Grabar datos para testear</h3>
 
@@ -296,8 +296,10 @@ Generate tests MFCCs:</p>
 
 <h3>Obtener resultados en vivo</h3>
 
-<p>Live Results:
-HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list</p>
+<p>Live Results:</p>
+
+<pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
+</code></pre>
       </section>
     </div>
 
