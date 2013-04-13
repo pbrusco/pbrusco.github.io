@@ -214,37 +214,44 @@ UNO u n o sp
 <pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet 
 </code></pre>
 
+<p>Aclaración: Este comando es el único que no logré hacer funcionar en Mac OS X, así que opté por correrlo en Ubuntu donde no hubo problemas. </p>
+
 <h3>2.3. Master label files (mlf)</h3>
 
-<p>Create "MFCCs words.mlf"</p>
+<p>Crear "MFCCs words.mlf"</p>
 
 <pre><code>irb Helpers/generate_mfccs_from_training.rb
 </code></pre>
 
-<p>(then, modify each element to contain a word transcription of what each file says)</p>
+<p>Luego modificar cada elemento para que contenga la transcripción a nivel palabras de lo que cada .wav contiene.</p>
 
-<p>Transcribe words.mlf into phones.mlf (for training data in this case):</p>
+<p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando: </p>
 
 <pre><code>HLEd -l ’*’ -d Dictionary/phones.dict -i Data/train\ MFCCs-phones.mlf Configs/HLEd.config Data/train\ MFCCs-words.mlf
 </code></pre>
 
 <h3>Listado de archivos de entrenamiento para HCopy</h3>
 
-<p>Generate HCopy.script </p>
+<p>Para generar HCopy.script </p>
 
 <pre><code>irb Helpers/generate_hcopy_script.rb
 </code></pre>
 
 <h3>Mel Frequency Cepstral Coefficients</h3>
 
-<p>Generate MFCCs from wavs:</p>
+<p>Para generar MFCCs a partir de wavs, primero necesitamos generar el archivo de configuración HCopy.config</p>
+
+<pre><code>HCopy.config
+</code></pre>
+
+<p>Luego</p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
 
 <h3>2.4. Preparando la estructura para el modelo</h3>
 
-<p>Create directories for models:</p>
+<p>Ahora necesitamos crear una serie de carpetas para poder almacenar los modelos, podemos usar el siguiente comando Bash:</p>
 
 <pre><code>for NUMBER in {0..9}
 do
@@ -254,7 +261,7 @@ done
 
 <h3>2.5. Listado de archivos de entrenamiento para HCompV</h3>
 
-<p>Generate HCompV.script file:</p>
+<p>Para generar HCompV.script:</p>
 
 <pre><code>irb Helpers/generate_hcompv_script.rb
 </code></pre>
@@ -263,20 +270,30 @@ done
 
 <h3>3.1. Hmm0 - Hmm3</h3>
 
-<p>Train first prototype model into hmm0 folder:</p>
+<p>Primer modelo prototípico:</p>
+
+<pre><code></code></pre>
+<p>Primer paso, modelo prototípico a la carpeta hmm0</p>
+
+<p>Nuevamente necesitamos el archivo de configuración correspondiente:</p>
+
+<pre><code>HCompV.config
+</code></pre>
+
+<p>Ahora si, </p>
 
 <pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
 </code></pre>
 
-<p>--copy prototype to hmmdefs (to each phoneme) --
---copy vFloors to macros -- </p>
-
-<p>Generate HERest.script file:</p>
+<ul>
+<li>Copiar el prototipo en hmmdefs (uno por cada fonema, utilizando phones.list)</li>
+<li>Copiar vFloors a macros agregando el header</li>
+</ul><p>Generar el script para HERest</p>
 
 <pre><code>irb Helpers/generate_herest_script.rb
 </code></pre>
 
-<p>Re-estimate using embedded re-estimation tool HERest:</p>
+<p>Re-estimar usando la herramienta para "embedded re-estimation" HERest</p>
 
 <pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
@@ -285,7 +302,8 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 
 <h3>3.2. Hmm4 - Hmm7</h3>
 
-<p>(After adding the new "sp" state after copying from hmm3 to hmm4 and adding sp using center state of sil) (<a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7</a>)</p>
+<p>Agregar el estado "sp" en una copia de hmmdefs de hmm3 y guardarlo en hmm4. Para agregar el estado, hacer lo siguiente:
+<a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">agregar sp</a></p>
 
 <pre><code>HHEd -A -D -T 1 -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Configs/HHEd.config Dictionary/phones-with-sp.list
 </code></pre>
@@ -300,22 +318,21 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 
 <h3>4.2. Generar vectores MFCC</h3>
 
-<p>Test models: 
-Generate tests MFCCs:</p>
+<p>Generar los MFCCs de los datos de testeo</p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopyTests.config -S Scripts/HCopyTests.script
 </code></pre>
 
 <h3>Obtener resultados</h3>
 
-<p>Results:</p>
+<p>Resultados: </p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
 
 <h3>4.3. Obtener resultados en vivo</h3>
 
-<p>Live Results:</p>
+<p>Resultados en vivo:</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
