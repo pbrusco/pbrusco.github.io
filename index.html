@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Tutorial HTK: Reconocedor de Dígitos en español.  : HTK, Dígitos, Español" />
+    <meta name="description" content="Reconocimiento de Dígitos en Castellano utilizando HTK : htk, dígitos, español, castellano, speech-recognition" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Tutorial HTK: Reconocedor de Dígitos en español. </title>
+    <title>Reconocimiento de Dígitos en Castellano utilizando HTK</title>
   </head>
 
   <body>
@@ -18,8 +18,8 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/pbrusco">View on GitHub</a>
 
-          <h1 id="project_title">Tutorial HTK: Reconocedor de Dígitos en español. </h1>
-          <h2 id="project_tagline">HTK, Dígitos, Español</h2>
+          <h1 id="project_title">Reconocimiento de Dígitos en Castellano utilizando HTK</h1>
+          <h2 id="project_tagline">htk, dígitos, español, castellano, speech-recognition</h2>
 
         </header>
     </div>
@@ -29,7 +29,9 @@
       <section id="main_content" class="inner">
         <h1>Bienvenidos</h1>
 
-<p>A continuación implementaremos un reconocedor de dígitos en español, para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+<p>A continuación implementaremos un reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+
+<p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9. </p>
 
 <p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/e393a5db8f242bb9b173f570fdd06554be5aa968/HTK/spike%20digitos?at=master">repositorio.</a></p>
 
@@ -45,17 +47,19 @@
 
 <h2>Preámbulos</h2>
 
-<p>La tarea de reconocimiento del habla (speech recognition) se basa en .. </p>
+<p>La tarea de reconocimiento del habla (speech recognition) es una tarea difícil. La mayor dificultad está en la enorme cantidad de variaciones al analizar una palabra dicha por dos personas distintas, a través de dos canales distintos (estudio radial vs. teléfono), en situaciones distintas, con distintas emociones, por dos personas que hablan el mismo idioma pero de distintos orígenes, etc. E incluso, una misma persona intentando reproducir lo que dijo, nunca puede hacerlo exactamente igual. </p>
 
-<p>Teoría...</p>
+<p>Esto implica, que la tarea de hacer que una maquina reconozca el habla incluye facilitarle datos de entrenamiento suficientes y buenos algoritmos para normalizar la señal acústica. </p>
 
-<p>Software ...</p>
+<p>Uno de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), es decir, modelos probabilísticos sobre las señales acústicas que además, necesitan que esta señal esté expresada de alguna manera que permita comprarlas. Por lo tanto se combina esta técnica con normalizaciones de la señal acústica extrayendo "Mel Frecuency Ceptral Coefficients" (MFCCs) y luego utilizando "Gaussian Mixture Models" (GMMs) que finalmente, permiten comparar estas palabras habladas a pesar de sus variaciones esperables. </p>
+
+<p>Existen varios sistemas (o toolkits) que implementan y facilitan la interacción y entrenamiento de HMMs. En este tutorial utilizaremos <a href="http://htk.eng.cam.ac.uk">The Hidden Markov Model Toolkit (HTK)</a>. </p>
 
 <h2>Preparando el entorno</h2>
 
 <h3>Software</h3>
 
-<p>Para poder generar nuestro reconocedor, primero debemos instalar <a href="http://htk.eng.cam.ac.uk/download.shtml">The Hidden Markov Model Toolkit (HTK)</a>. La forma de instalarlo depende de nuestro sistema operativo:</p>
+<p>Para poder generar nuestro reconocedor, primero debemos descargar <a href="http://htk.eng.cam.ac.uk/download.shtml">HTK</a>. La forma de instalarlo depende de nuestro sistema operativo:</p>
 
 <p>Dentro de la carpeta descargada: </p>
 
