@@ -168,7 +168,7 @@ UNO u n o sp
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
 
-<p>(notar que se agrega una pausa corta "sp" al final de cada palabra y que debe contenter SENT-START y SENT-END, con "sil" para poder funcionar)</p>
+<p>(notar que se agrega una pausa corta "sp" al final de cada palabra y que debe contenter SENT-START y SENT-END con "sil" para poder funcionar)</p>
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
@@ -190,7 +190,7 @@ UNO u n o sp
 <pre><code>irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
 
-<p>Este scipt escanea Data/Recorded/waves/train en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav y los guarda en el la carpeta del segundo parametro "Data/Train/" con el nombre -.lab (ejemplo el archivo train1-8.lab mostrado anteriormente)</p>
+<p>Este scipt escanea Data/Recorded/waves/train en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav y los guarda en el la carpeta del segundo parametro "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-8.lab mostrado anteriormente)</p>
 
 <h2>2. Combinando los datos</h2>
 
