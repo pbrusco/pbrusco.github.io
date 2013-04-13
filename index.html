@@ -37,10 +37,12 @@
 
 <h3>Hacia dónde vamos?</h3>
 
-<p>La idea de este tutorial es lograr, a partir de grabaciones de audio que contienen dígitos (solo dígitos),  obtener la transcripción de </p>
+<p>Queremos, a partir de grabaciones de entrada de la pinta:</p>
 
 <p><strong>Entrada</strong>
  <img src="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/12151516790.png" alt="12151516790"></p>
+
+<p>obtener la transcripción de los dígitos, por ejemplo</p>
 
 <p><strong>Salida</strong>
 "1 2 1 5 1 5 1 6 7 9 0"</p>
@@ -51,7 +53,7 @@
 
 <p>Esto implica, que la tarea de hacer que una maquina reconozca el habla incluye facilitarle datos de entrenamiento suficientes y buenos algoritmos para normalizar la señal acústica. </p>
 
-<p>Uno de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), es decir, modelos probabilísticos sobre las señales acústicas que además, necesitan que esta señal esté expresada de alguna manera que permita comprarlas. Por lo tanto se combina esta técnica con normalizaciones de la señal acústica extrayendo "Mel Frecuency Ceptral Coefficients" (MFCCs) y luego utilizando "Gaussian Mixture Models" (GMMs) que finalmente, permiten comparar estas palabras habladas a pesar de sus variaciones esperables. </p>
+<p>Uno de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), es decir, modelos probabilísticos sobre las señales acústicas que además, necesitan que esta señal esté expresada de alguna manera que permita comprarlas. Por lo tanto se combina esta técnica con otras como una que permite normalizar la señal acústica extrayendo los llamados "Mel Frecuency Ceptral Coefficients" (MFCCs) y luego, por ejemplo, utilizando "Gaussian Mixture Models" (GMMs), se consigue finalmente que se pueda comparar palabras habladas a pesar de sus variaciones esperables. </p>
 
 <p>Existen varios sistemas (o toolkits) que implementan y facilitan la interacción y entrenamiento de HMMs. En este tutorial utilizaremos <a href="http://htk.eng.cam.ac.uk">The Hidden Markov Model Toolkit (HTK)</a>. </p>
 
@@ -145,6 +147,11 @@ UNO
 
 <h3>1.3. Diccionario de fonemas</h3>
 
+<p>Este paso es importante e indica que fonemas utilizaremos para describir cada palabra, aquí es donde, el español hablado en España varía del hablado en Argentina, por ejemplo, la palabra "cero" puede tener las siguientes transcripciones a fonemas respectivamente.
+<code>CERO th e r o</code> o <code>CERO s e r o</code></p>
+
+<p>Ya que utilizaremos castellano, el diccionario tendrá la siguiente pinta:</p>
+
 <pre><code>CERO s e r o sp
 CINCO s i n c o sp
 CUATRO k u a t r o sp
@@ -160,6 +167,8 @@ UNO u n o sp
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
+
+<p>(notar que se agrega una pausa corta "sp" al final de cada palabra y que debe contenter SENT-START y SENT-END, con "sil" para poder funcionar)</p>
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
