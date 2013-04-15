@@ -108,6 +108,8 @@ sudo apt-get install libx11-dev
 
 <p>Recomiendo también, utilizar un buen sistema de control de versiones (git, hg, svn, etc) para hacer commits ante cada paso logrado y así estar más preparados ante un olvido o un error en el proceso. </p>
 
+<p>Listo, con la estructura creada, podemos empezar a trabajar en nuestro reconocedor.</p>
+
 <h3>Sobre el formato de los archivos</h3>
 
 <p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a> en View - Line Endings - Unix por ejemplo)</p>
@@ -368,18 +370,11 @@ ENORMALISE = F
 
 <p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
 
-<h3>2.5. Listado de archivos de entrenamiento para HCompV</h3>
+<h3>2.5. Generación de un modelo prototípico</h3>
 
-<p>Para generar HCompV.script:</p>
+<p>Para lograr entrenar nuestro modelo, debemos partir de un modelo base que luego varíe hasta convertirse en el HMM final que utilizaremos para reconocer palabras. Este paso lo lograremos creando un modelo en Models/hmm0. </p>
 
-<pre><code>irb Helpers/generate_hcompv_script.rb
-</code></pre>
-
-<h2>3. Entrenamiento del modelo</h2>
-
-<h3>3.1. Hmm0 - Hmm3</h3>
-
-<p>Primer modelo prototípico:</p>
+<p>Lo primero que hay que hacer es crear un nuevo archivo que contenga lo siguiente:</p>
 
 <pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;  
   ~h "prototype"
@@ -410,14 +405,36 @@ ENORMALISE = F
 
 </code></pre>
 
-<p>Primer paso, modelo prototípico a la carpeta hmm0</p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/prototype?at=master">Models/prototype</a></p>
 
-<p>Nuevamente necesitamos el archivo de configuración correspondiente:</p>
+<p>Luego, necesitamos un archivo de configuración para el comando que utilizaremos:</p>
 
-<pre><code>HCompV.config
+<pre><code># Coding parameters
+SOURCEFORMAT = HTK
+TARGETKIND = MFCC_0_D_A
+TARGETRATE = 100000.0
+SAVECOMPRESSED = T
+SAVEWITHCRC = T
+WINDOWSIZE = 250000.0
+USEHAMMING = T
+PREEMCOEF = 0.97
+NUMCHANS = 26
+CEPLIFTER = 22
+NUMCEPS = 12
+ENORMALISE = F
+
 </code></pre>
 
-<p>Ahora si, </p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Config/HCompV.config?at=master">Configs/HCompV.config</a></p>
+
+<p>Y un listado correspondiente para este archivo</p>
+
+<pre><code>irb Helpers/generate_hcompv_script.rb
+</code></pre>
+
+<p>Que genera algo como: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCompV.script?at=master">Scripts/HCompV.script</a></p>
+
+<p>Ahora si, podemos utilizar el comando para crear nuestro primer modelo entrenado a partir de los datos</p>
 
 <pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
 </code></pre>
@@ -425,7 +442,11 @@ ENORMALISE = F
 <ul>
 <li>Copiar el prototipo en hmmdefs (uno por cada fonema, utilizando phones.list)</li>
 <li>Copiar vFloors a macros agregando el header</li>
-</ul><p>Generar el script para HERest</p>
+</ul><h2>3. Entrenamiento del modelo</h2>
+
+<h3>3.1. Hmm1 - Hmm3</h3>
+
+<p>Ahora si, ya tenemos un modelo prototípico del cual partir. Como hicimos anteriormente, generamos el listado necesario para el comando que utilizaremos, en este caso, HERest</p>
 
 <pre><code>irb Helpers/generate_herest_script.rb
 </code></pre>
