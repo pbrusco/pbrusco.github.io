@@ -62,9 +62,9 @@ Luego, se combina esta técnica con otras como una que permite normalizar las se
 
 <h3>Software</h3>
 
-<p>Para poder generar nuestro reconocedor, primero debemos descargar <a href="http://htk.eng.cam.ac.uk/download.shtml">HTK</a>. La forma de instalarlo depende de nuestro sistema operativo:</p>
+<p>La forma de instalar el software necesario depende de nuestro sistema operativo, aquí mostraremos como lograrlo en Ubuntu y Mac OS X.</p>
 
-<p>Dentro de la carpeta descargada: </p>
+<p>Para poder generar nuestro reconocedor, primero debemos descargar <a href="http://htk.eng.cam.ac.uk/download.shtml">HTK</a>, luego, dentro de la carpeta descargada: </p>
 
 <pre><code> ./configure
 make all
@@ -104,11 +104,13 @@ sudo apt-get install libx11-dev
 
 <h3>Sobre el formato de los archivos</h3>
 
-<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a>: View/Line Endings/Unix por ejemplo)</p>
+<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a> en View - Line Endings - Unix por ejemplo)</p>
 
 <hr><h1>Implementación</h1>
 
 <h2>1. Preparando los datos</h2>
+
+<p>En esta sección generaremos la gramática, los listados y el diccionario base para comenzar a trabajar. Por otro lado, debemos conseguir (o grabar) los archivos de audio que usaremos para entrenar al sistema. </p>
 
 <h3>1.1. Gramática</h3>
 
@@ -173,11 +175,17 @@ UNO u n o sp
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
-<p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios) </p>
+<p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios). </p>
 
 <p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train1/seis.wav?at=master">Data/Recorded/waves/train/train1/seis.wav</a></p>
 
-<p>Por otro lado, cada uno de estos datos de entrenamiento necesitan una transcripción (.lab), esta transcripción debe contener los fonemas que se utilizan en la palabra grabada. </p>
+<p>Para lograr compatibilidad con HTK, usaremos el siguiente formato para grabar (entre paréntesis indico donde encontrar la opción si utilizamos Audacity 2.0.3):</p>
+
+<ul>
+<li>Mono (Edit\Preferences\Devices) </li>
+<li>16 kHz sampling frequency (Edit\Preferences\Quality\Sampling) </li>
+<li>16 bits por sample (Edit\Preferences\Quality\Sampling) </li>
+</ul><p>Por otro lado, cada uno de estos datos de entrenamiento necesitan una transcripción (.lab), esta transcripción debe contener los fonemas que se utilizan en la palabra grabada. </p>
 
 <p>En vez de hacerlo manualmente, aprovecharemos un script que se encargará de facilitarnos ese trabajo, pero en caso de no tener este script, habría que construirlos manualmente con la pinta:</p>
 
@@ -192,7 +200,8 @@ UNO u n o sp
 irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
 
-<p>Este scipt escanea Data/Recorded/waves/train en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav y los guarda en el la carpeta del segundo parametro "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-8.lab mostrado anteriormente)</p>
+<p>Este scipt escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
+Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train5?at=master">train5</a> por ejemplo) el script copia estas transcripciones agregándoles en el nombre, el prefijo de la subcarpeta correspondiente. Se puede ver un ejemplo de este caso en <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train5-siete.lab?at=master">Data/Train/train5-siete</a>, notar que el .lab no fue generado automaticamente sino copiado de la carpeta train5. </p>
 
 <h2>2. Combinando los datos</h2>
 
