@@ -310,9 +310,11 @@ sil
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/train%20MFCCs-phones.mlf?at=master">Data/train MFCCs-phones.mlf</a></p>
 
-<h3>Listado de archivos de entrenamiento para HCopy</h3>
+<h3>Mel Frequency Cepstral Coefficients (MFCCs)</h3>
 
-<p>A continuación, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, generalmente, de listados de archivos que los comandos luego recorrerán y tomarán como input. </p>
+<p>Para traducir los .wav al formato de features que utilizaremos (MFCCs), vamos a usar el comando <em>HCopy</em></p>
+
+<p>Primero, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, generalmente, de listados de archivos que los comandos luego recorrerán y tomarán como input. </p>
 
 <p>Por ejemplo, antes de correr el comando HCopy, utilizaremos el siguiente comando</p>
 
@@ -332,17 +334,33 @@ sil
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopy.script?at=master">Scripts/HCopy.script</a></p>
 
-<h3>Mel Frequency Cepstral Coefficients</h3>
+<p>Luego, necesitamos generar el archivo de configuración HCopy.config</p>
 
-<p>Para generar MFCCs a partir de wavs, primero necesitamos generar el archivo de configuración HCopy.config</p>
+<pre><code># Coding parameters
+SOURCEKIND = WAVEFORM
+SOURCEFORMAT = WAV
+TARGETKIND = MFCC_0
+TARGETRATE = 100000.0
+SAVECOMPRESSED = T
+SAVEWITHCRC = T
+WINDOWSIZE = 250000.0
+USEHAMMING = T
+PREEMCOEF = 0.97
+NUMCHANS = 26
+CEPLIFTER = 22
+NUMCEPS = 12
+ENORMALISE = F
 
-<pre><code>HCopy.config
 </code></pre>
 
-<p>Luego</p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HCopy.config?at=master">Configs/HCopy.config</a></p>
+
+<p>Finalmente, podemos correr HCopy para traducir de wavs a mfccs: </p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
+
+<p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
 
 <h3>2.4. Preparando la estructura para el modelo</h3>
 
