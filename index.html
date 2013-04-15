@@ -439,10 +439,46 @@ ENORMALISE = F
 <pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
 </code></pre>
 
-<ul>
-<li>Copiar el prototipo en hmmdefs (uno por cada fonema, utilizando phones.list)</li>
-<li>Copiar vFloors a macros agregando el header</li>
-</ul><h2>3. Entrenamiento del modelo</h2>
+<p>Esto genera 2 archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a> que nos serán utiles en el próximo paso.</p>
+
+<h3>2.6. Generación del primer modelo</h3>
+
+<p>Una vez que tenemos los archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
+
+<p>Ejemplo, el prototipo tiene la forma </p>
+
+<pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;  
+  ~h "prototype"
+&lt;BeginHMM&gt;
+  &lt;NumStates&gt; 5
+  &lt;State&gt; 2 
+  ...
+&lt;EndHMM&gt;
+</code></pre>
+
+<p>Donde llamaré HMMPrototipo a lo que esta entre  y  incluyendo estas etiquetas</p>
+
+<p>Crearemos otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
+
+<pre><code>~h "c"
+HMMPrototipo
+~h "e"
+HMMPrototipo
+...
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/hmmdefs?at=master">Models/hmm0/hmmdefs</a></p>
+
+<p>Finalmente, copiaremos el archivo Models/hmm0/vFloors a uno nuevo llamado macro agregando el siguiente header: </p>
+
+<pre><code>~o
+&lt;STREAMINFO&gt; 1 39
+&lt;VECSIZE&gt; 39&lt;NULLD&gt;&lt;MFCC_D_A_0&gt;&lt;DIAGC&gt;
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/macros?at=master">Models/hmm0/macros</a></p>
+
+<h2>3. Entrenamiento del modelo</h2>
 
 <h3>3.1. Hmm1 - Hmm3</h3>
 
@@ -451,7 +487,7 @@ ENORMALISE = F
 <pre><code>irb Helpers/generate_herest_script.rb
 </code></pre>
 
-<p>Re-estimar usando la herramienta para "embedded re-estimation" HERest</p>
+<p>Ahora, re-estimaremos el modelo usando la herramienta para "embedded re-estimation" HERest</p>
 
 <pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
@@ -460,11 +496,15 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 
 <h3>3.2. Hmm4 - Hmm7</h3>
 
-<p>Agregar el estado "sp" en una copia de hmmdefs de hmm3 y guardarlo en hmm4. Para agregar el estado, hacer lo siguiente:
+<p>En este paso, debemos agregar el estado "sp" en una copia de hmmdefs de hmm3 y guardarlo en hmm4. Para agregar el estado, hacer lo siguiente:
 <a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">agregar sp</a></p>
+
+<p>Luego del reemplazo, corremos:</p>
 
 <pre><code>HHEd -A -D -T 1 -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Configs/HHEd.config Dictionary/phones-with-sp.list
 </code></pre>
+
+<p>Cuando se agrego el nuevo estado, seguimos re-estimando con:</p>
 
 <pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm5/macros -H Models/hmm5/hmmdefs -M Models/hmm6 Dictionary/phones-with-sp.list
 HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones-with-sp.list
@@ -474,23 +514,67 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 
 <h3>4.1. Grabar datos para testear</h3>
 
+<p>De la misma forma que grabamos los datos de entrenamiento (mismo formato sobre todo) grabaremos casos de prueba en la carpeta [Data/Recorded/waves/train], estos datos no necesitan transcripción, ya que esa será la salida de nuestro programa.</p>
+
 <h3>4.2. Generar vectores MFCC</h3>
 
-<p>Generar los MFCCs de los datos de testeo</p>
+<p>Primero, debemos, al igual que con los datos de entrenamiento, listar los archivos de test que poseemos, por ejemplo</p>
+
+<pre><code>./Data/Recorded/waves/tests/0.wav ./Data/Test/0.mfc
+./Data/Recorded/waves/tests/1.wav ./Data/Test/1.mfc
+./Data/Recorded/waves/tests/2.wav ./Data/Test/2.mfc
+./Data/Recorded/waves/tests/3.wav ./Data/Test/3.mfc
+./Data/Recorded/waves/tests/4.wav ./Data/Test/4.mfc
+./Data/Recorded/waves/tests/5.wav ./Data/Test/5.mfc
+./Data/Recorded/waves/tests/6.wav ./Data/Test/6.mfc
+./Data/Recorded/waves/tests/7.wav ./Data/Test/7.mfc
+./Data/Recorded/waves/tests/8.wav ./Data/Test/8.mfc
+./Data/Recorded/waves/tests/9.wav ./Data/Test/9.mfc
+./Data/Recorded/waves/tests/12151516790.wav ./Data/Test/12151516790.mfc
+./Data/Recorded/waves/tests/64.wav ./Data/Test/64.mfc
+./Data/Recorded/waves/tests/111111111.wav ./Data/Test/111111111.mfc
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopyTests.script?at=master">Scripts/HCopyTests.script</a></p>
+
+<p>Luego, generar el archivo de configuración:</p>
+
+<pre><code># Coding parameters
+SOURCEKIND     = WAVEFORM
+SOURCEFORMAT = WAV
+TARGETKIND = MFCC_0_D_A
+TARGETRATE = 100000.0
+SAVECOMPRESSED = T
+SAVEWITHCRC = T
+WINDOWSIZE = 250000.0
+USEHAMMING = T
+PREEMCOEF = 0.97
+NUMCHANS = 26
+CEPLIFTER = 22
+NUMCEPS = 12
+ENORMALISE = F
+
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HCopyTests.config?at=master">Configs/HCopyTests.config</a></p>
+
+<p>Y finalmente, los MFCCs a partir de los wavs:</p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopyTests.config -S Scripts/HCopyTests.script
 </code></pre>
 
-<h3>Obtener resultados</h3>
+<h3>Obtención de resultados</h3>
 
-<p>Resultados: </p>
+<p>Para testear contra el modelo entrenado, utilizaremos el comando</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
 
+<p>Que genera un archivo llamado <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/recout.mlf?at=master">recout.mlf</a> que contiene los resultados de las pruebas</p>
+
 <h3>4.3. Obtener resultados en vivo</h3>
 
-<p>Resultados en vivo:</p>
+<p>Todavía no logré hacer funcionar el siguiente comando, pero se utilizar para no tener que grabar los tests sino hablarlos directamente y probar distintas combinaciones.</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
