@@ -96,11 +96,17 @@ sudo apt-get install libx11-dev
 
 <p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) </p>
 
+<p><strong>Aclaración importante</strong> Todos los scripts hechos en ruby, son simplemente automatizaciones de procesos que se pueden hacer tranquilamente a mano e incluso, la mayoría necesitan de un simple editor de texto. Recomiendo intentar realizar a mano el proceso antes (o incluso después) de correr los .irb para entender que funcionalidad aplican.</p>
+
 <h3>Organización del código</h3>
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
 <p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/code_organization.txt?at=master">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+
+<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://gist.github.com/pbrusco/5389168">crear_estructura.bash</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers?at=master">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./crear_estructura.bash</code>.</p>
+
+<p>Recomiendo también, utilizar un buen sistema de control de versiones (git, hg, svn, etc) para hacer commits ante cada paso logrado y así estar más preparados ante un olvido o un error en el proceso. </p>
 
 <h3>Sobre el formato de los archivos</h3>
 
@@ -362,17 +368,7 @@ ENORMALISE = F
 
 <p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
 
-<h3>2.5. Preparando la estructura para el modelo</h3>
-
-<p>Ahora necesitamos crear una serie de carpetas para poder almacenar los modelos, podemos usar el siguiente comando Bash:</p>
-
-<pre><code>for NUMBER in {0..9}
-do
-  mkdir Models/hmm$NUMBER
-done
-</code></pre>
-
-<h3>2.6. Listado de archivos de entrenamiento para HCompV</h3>
+<h3>2.5. Listado de archivos de entrenamiento para HCompV</h3>
 
 <p>Para generar HCompV.script:</p>
 
