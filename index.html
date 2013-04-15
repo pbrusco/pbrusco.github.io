@@ -183,7 +183,7 @@ UNO u n o sp
 <pre><code>0.0 0.5064375  o ch o
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train1-8.lab?at=master">Data/Train/train1-8.lab</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train1-ocho.lab?at=master">Data/Train/train1-ocho.lab</a></p>
 
 <p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
 
@@ -273,7 +273,35 @@ done
 
 <p>Primer modelo prototípico:</p>
 
-<pre><code></code></pre>
+<pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;  
+  ~h "prototype"
+&lt;BeginHMM&gt;
+  &lt;NumStates&gt; 5
+  &lt;State&gt; 2 
+    &lt;Mean&gt; 39
+      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+    &lt;Variance&gt; 39
+      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
+  &lt;State&gt; 3
+    &lt;Mean&gt; 39
+      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+    &lt;Variance&gt; 39
+      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
+  &lt;State&gt; 4
+    &lt;Mean&gt; 39
+      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+    &lt;Variance&gt; 39
+      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
+  &lt;TransP&gt; 5
+   0.000e+0   1.000e+0   0.000e+0   0.000e+0   0.000e+0
+   0.000e+0   6.000e-1   4.000e-1   0.000e+0   0.000e+0
+   0.000e+0   0.000e+0   6.000e-1   4.000e-1   0.000e+0
+   0.000e+0   0.000e+0   0.000e+0   6.000e-1   4.000e-1
+   0.000e+0   0.000e+0   0.000e+0   0.000e+0   0.000e+0
+&lt;EndHMM&gt;
+
+</code></pre>
+
 <p>Primer paso, modelo prototípico a la carpeta hmm0</p>
 
 <p>Nuevamente necesitamos el archivo de configuración correspondiente:</p>
