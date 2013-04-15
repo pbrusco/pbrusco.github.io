@@ -53,7 +53,8 @@
 
 <p>Esto implica, que la tarea de hacer que una maquina reconozca el habla incluye facilitarle datos de entrenamiento suficientes y buenos algoritmos para normalizar la señal acústica. </p>
 
-<p>Uno de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), es decir, modelos probabilísticos sobre las señales acústicas que además, necesitan que esta señal esté expresada de alguna manera que permita comprarlas. Por lo tanto se combina esta técnica con otras como una que permite normalizar la señal acústica extrayendo los llamados "Mel Frecuency Ceptral Coefficients" (MFCCs) y luego, por ejemplo, utilizando "Gaussian Mixture Models" (GMMs), se consigue finalmente que se pueda comparar palabras habladas a pesar de sus variaciones esperables. </p>
+<p>Algunos de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), modelos formales probabilísticos que hablan sobre probabilidades de, por ejemplo, que cierto fonema sea dicho de una u otra manera, o que luego de cierta parte de un fonema continúe alguna otra parte, etc.
+Luego, se combina esta técnica con otras como una que permite normalizar las señales sonoras extrayendo su esencia, una de las técnicas más utilizadas es la que consta de extraer los llamados <a href="http://es.wikipedia.org/wiki/MFCC">Mel Frecuency Ceptral Coefficients (MFCCs)</a> y luego, por ejemplo, utilizando <a href="http://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model">Gaussian Mixture Models (GMMs)</a>, se consigue finalmente que se pueda comparar palabras habladas a pesar de sus variaciones esperables. </p>
 
 <p>Existen varios sistemas (o toolkits) que implementan y facilitan la interacción y entrenamiento de HMMs. En este tutorial utilizaremos <a href="http://htk.eng.cam.ac.uk">The Hidden Markov Model Toolkit (HTK)</a>. </p>
 
