@@ -205,6 +205,8 @@ Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https:
 
 <h2>2. Combinando los datos</h2>
 
+<p>En esta sección, nos concentraremos en dejar todo listo para empezar con el entrenamiento. Generaremos un diccionario y listado de fonemas, convertiremos la gramática a un formato estándar, crearemos Master Label Files, convertiremos el audio a su vector de features (MFCCs), y crearemos las carpetas necesarias para almacenar los distintos modelos que irán avanzando a medida que avance el entrenamiento. </p>
+
 <h3>2.1. Diccionario y listado de fonemas</h3>
 
 <p>Para generar el diccionario y listado de fonemas que utilizaremos más adelante, usaremos el comando HDMan de HTK: </p>
@@ -229,24 +231,106 @@ Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https:
 
 <h3>2.3. Master label files (mlf)</h3>
 
-<p>Crear "MFCCs words.mlf"</p>
+<p>A continuación crearemos una version "naive" de un master label file, y digo "naive" porque no explota el verdadero poder de estos archivos, que permiten, entre otras cosas, una organización más inteligente de labels y grabaciones de entrenamiento. </p>
+
+<p>Primero, crearemos el archivo "MFCCs words.mlf"</p>
 
 <pre><code>irb Helpers/generate_mfccs_from_training.rb
 </code></pre>
 
-<p>Luego modificar cada elemento para que contenga la transcripción a nivel palabras de lo que cada .wav contiene.</p>
+<p>Esto genera un archivo de la pinta</p>
+
+<pre><code>#!MLF!#
+"*/train1-cero.lab"
+CERO
+.
+"*/train1-cinco.lab"
+CINCO
+.
+"*/train1-cuatro.lab"
+CUATRO
+.
+"*/train1-dos.lab"
+DOS
+.
+"*/train1-uno.lab"
+UNO
+.
+"*/train2-cero.lab"
+CERO
+.
+"*/train2-cinco.lab"
+CINCO
+.
+"*/train2-cuatro.lab"
+...
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/train%20MFCCs-words.mlf?at=master">Data/train MFCCs-words.mlf</a></p>
+
+<p>Luego asegurarse que cada elemento contenga la transcripción a nivel palabras de lo que cada .wav contiene (el script lo hace en base al nombre del archivo). </p>
 
 <p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando: </p>
 
 <pre><code>HLEd -l ’*’ -d Dictionary/phones.dict -i Data/train\ MFCCs-phones.mlf Configs/HLEd.config Data/train\ MFCCs-words.mlf
 </code></pre>
 
+<p>Que genera un archivo de la pinta:</p>
+
+<pre><code>#!MLF!#
+"’*’/train1-cero.lab"
+sil
+s
+e
+r
+o
+sil
+.
+"’*’/train1-cinco.lab"
+sil
+s
+i
+n
+c
+o
+sil
+.
+"’*’/train1-cuatro.lab"
+sil
+k
+u
+a
+t
+r
+o
+sil
+.
+...
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/train%20MFCCs-phones.mlf?at=master">Data/train MFCCs-phones.mlf</a></p>
+
 <h3>Listado de archivos de entrenamiento para HCopy</h3>
 
-<p>Para generar HCopy.script </p>
+<p>A continuación, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, generalmente, de listados de archivos que los comandos luego recorrerán y tomarán como input. </p>
+
+<p>Por ejemplo, antes de correr el comando HCopy, utilizaremos el siguiente comando</p>
 
 <pre><code>irb Helpers/generate_hcopy_script.rb
 </code></pre>
+
+<p>Este comando, crea un archivo de la pinta:</p>
+
+<pre><code>./Data/Recorded/waves/train/train1/cero.wav  ./Data/Train/train1-cero.mfc 
+./Data/Recorded/waves/train/train1/cinco.wav  ./Data/Train/train1-cinco.mfc 
+./Data/Recorded/waves/train/train1/cuatro.wav  ./Data/Train/train1-cuatro.mfc 
+./Data/Recorded/waves/train/train1/dos.wav  ./Data/Train/train1-dos.mfc 
+./Data/Recorded/waves/train/train1/nueve.wav  ./Data/Train/train1-nueve.mfc 
+./Data/Recorded/waves/train/train1/ocho.wav  ./Data/Train/train1-ocho.mfc 
+./Data/Recorded/waves/train/train1/seis.wav  ./Data/Train/train1-seis.mfc 
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopy.script?at=master">Scripts/HCopy.script</a></p>
 
 <h3>Mel Frequency Cepstral Coefficients</h3>
 
