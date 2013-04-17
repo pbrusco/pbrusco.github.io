@@ -121,7 +121,18 @@ sudo apt-get install libx11-dev:i386
 
 <h2>0. Idea general</h2>
 
-<p>... a completar ...</p>
+<p>La implementación de este reconocedor constará de 4 pasos esenciales:</p>
+
+<ul>
+<li>Preparación de datos</li>
+<li>Combinación de datos</li>
+<li>Entrenamiento del modelo</li>
+<li>Generación de resultados</li>
+</ul><p>En los primeros dos pasos, generaremos los archivos necesarios para definir que tipo y de que manera reconoceremos palabras en el sistema (gramática, diccionario, listados de palabras). Luego, grabaremos el audio necesario para el entrenamiento y lo convertiremos a un formato aceptable para los modelos (de .wav a MFCCs) mientras preparamos un modelo prototipo que utilizaremos en los siguientes pasos.</p>
+
+<p>En el tercer paso, nos concentraremos en entrenar y pulir los modelos que van a servir para reconocer las grabaciones de prueba, es decir, entrenar los HMMs puliendo las distribuciones probabilísticas asociadas a los distintos estados. </p>
+
+<p>Finalmente, en el cuarto paso, grabaremos datos de prueba y los utilizaremos para ver que tan buena fue nuestra aproximación a lo que uno espera de un reconocedor de palabras.</p>
 
 <h2>1. Preparando los datos</h2>
 
