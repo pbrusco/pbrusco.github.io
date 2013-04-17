@@ -78,6 +78,9 @@ sudo make install
 <pre><code>sudo apt-get install gcc-multilib
 sudo apt-get install libx11-dev
 ./configure --disable-hslab (por un error -lX11) 
+sudo apt-get install libc6-dev-i386 
+sudo apt-get install libx11-dev:i386
+
 </code></pre>
 
 <p>(si fue necesario realizar el ultimo paso, no dispondremos de la herramienta HSLab, reemplazable por, por ejemplo, audacity)</p>
@@ -94,7 +97,7 @@ sudo apt-get install libx11-dev
 
 <p><strong>Ruby</strong></p>
 
-<p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) </p>
+<p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) y <a href="http://rubygems.org/pages/download">RubyGems</a></p>
 
 <p><strong>Aclaración importante</strong> Todos los scripts hechos en ruby, son simplemente automatizaciones de procesos que se pueden hacer tranquilamente a mano e incluso, la mayoría necesitan de un simple editor de texto. Recomiendo intentar realizar a mano el proceso antes (o incluso después) de correr los .irb para entender que funcionalidad aplican.</p>
 
@@ -165,7 +168,7 @@ UNO
 <p>Este paso es importante e indica que fonemas utilizaremos para describir cada palabra, aquí es donde, el español hablado en España varía del hablado en Argentina, por ejemplo, la palabra "cero" puede tener las siguientes transcripciones a fonemas respectivamente.
 <code>CERO th e r o</code> o <code>CERO s e r o</code></p>
 
-<p>Ya que utilizaremos castellano, el diccionario tendrá la siguiente pinta:</p>
+<p>Por lo tanto, el diccionario tendrá la siguiente pinta:</p>
 
 <pre><code>CERO s e r o sp
 CINCO s i n c o sp
@@ -212,7 +215,7 @@ UNO u n o sp
 irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
 
-<p>Este scipt escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
+<p>Este script escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
 Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train5?at=master">train5</a> por ejemplo) el script copia estas transcripciones agregándoles en el nombre, el prefijo de la subcarpeta correspondiente. Se puede ver un ejemplo de este caso en <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train5-siete.lab?at=master">Data/Train/train5-siete</a>, notar que el .lab no fue generado automaticamente sino copiado de la carpeta train5. </p>
 
 <h2>2. Combinando los datos</h2>
@@ -282,7 +285,19 @@ CINCO
 
 <p>Luego asegurarse que cada elemento contenga la transcripción a nivel palabras de lo que cada .wav contiene (el script lo hace en base al nombre del archivo). </p>
 
-<p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando: </p>
+<p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando <code>HLEd</code></p>
+
+<p>Primero, generaremos un archivo de configuración con la siguiente pinta:</p>
+
+<pre><code>EX
+IS sil sil
+DE sp
+
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HLEd.config?at=master">Configs/HLEd.config</a></p>
+
+<p>Y luego, el comando propiamente dicho: </p>
 
 <pre><code>HLEd -l ’*’ -d Dictionary/phones.dict -i Data/train\ MFCCs-phones.mlf Configs/HLEd.config Data/train\ MFCCs-words.mlf
 </code></pre>
