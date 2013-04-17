@@ -165,8 +165,6 @@ DOS
 NUEVE
 OCHO
 SEIS
-SENT-END
-SENT-START
 SIETE
 TRES
 UNO
@@ -188,16 +186,12 @@ DOS d o s sp
 NUEVE n u e b e sp
 OCHO o ch o sp
 SEIS s e i s sp
-SENT-END sil
-SENT-START sil
 SIETE s i e t e sp
 TRES t r e s sp
 UNO u n o sp
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
-
-<p>(notar que se agrega una pausa corta "sp" al final de cada palabra y que debe contenter SENT-START y SENT-END con "sil" para poder funcionar)</p>
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
@@ -240,9 +234,18 @@ Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https:
 <pre><code>HDMan -m -w Dictionary/DictionarySources/words-sorted.list -n Dictionary/phones-with-sp.list -l dlog Dictionary/phones.dict Dictionary/DictionarySources/dict
 </code></pre>
 
-<p>Esto último, genera 2 archivos importantes: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones-with-sp.list?at=master">Dictionary/phones-with-sp.list</a>, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
+<p>Esto último, genera 2 archivos importantes: Dictionary/phones.dict y Dictionary/phones-with-sp.list, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
 
-<p>Podrán notar que phones.dict y DictionarySources/dict son muy parecidos (o iguales en este caso), la razón para que esto ocurra es que dict es usado como source para generar phones.dict, y solo se toma de él las palabras que aparecen en word-sorted.list. Es decir, sería totalmente posible tener un diccionario dict con muchas más traducciones palabra-fonemas como source. </p>
+<p>Lo que ocurrió es que dict fue usado como origen para generar phones.dict, y solo se toma de él las palabras que aparecen en word-sorted.list. Es decir, sería totalmente posible tener un diccionario dict con muchas más traducciones palabra-fonemas como source. </p>
+
+<p>Además, debemos agregar al diccionario las siguientes lineas (manteniendo el orden alfabético)</p>
+
+<pre><code>SENT-END [] sil
+SENT-START [] sil
+SILENCE sil
+</code></pre>
+
+<p>Quedando finalmente: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a></p>
 
 <p>Luego, debemos crear un nuevo archivo copiando Dictionary/phones-with-sp.list en el cual borremos la linea que contiene al fonema "sp", generando así el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a></p>
 
