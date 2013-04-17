@@ -475,7 +475,7 @@ ENORMALISE = F
 &lt;EndHMM&gt;
 </code></pre>
 
-<p>Donde llamaré HMMPrototipo a lo que esta entre  y  incluyendo estas etiquetas</p>
+<p>Donde llamaré HMMPrototipo a lo que esta entre &lt;BeginHMM&gt; y &lt;EndHMM&gt; incluyendo estas etiquetas</p>
 
 <p>Crearemos otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
 
@@ -584,21 +584,43 @@ ENORMALISE = F
 <pre><code>HCopy -T 1 -C Configs/HCopyTests.config -S Scripts/HCopyTests.script
 </code></pre>
 
-<h3>Obtención de resultados</h3>
+<h3>4.3. Obtención de resultados</h3>
 
-<p>Para testear contra el modelo entrenado, utilizaremos el comando</p>
+<p>Para testear contra el modelo entrenado, utilizaremos el comando <code>HVite</code>, para lo cual necesitamos el listado de archivos de entrenamiento:</p>
+
+<pre><code>irb Helpers/generate_hvite_script.rb 
+</code></pre>
+
+<p>Este comando, crea un archivo de la pinta:</p>
+
+<pre><code>./Data/Test/0.mfc
+./Data/Test/1.mfc
+./Data/Test/111111111.mfc
+./Data/Test/12151516790.mfc
+...
+</code></pre>
+
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HVite.script?at=master">Scripts/HVite.script</a></p>
+
+<p>Y finalmente: </p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
 
-<p>Que genera un archivo llamado <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/recout.mlf?at=master">recout.mlf</a> que contiene los resultados de las pruebas</p>
+<p>Que genera un archivo llamado <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/recout.mlf?at=master">recout.mlf</a> que contiene los resultados de las pruebas en formato MLF.</p>
 
-<h3>4.3. Obtener resultados en vivo</h3>
+<h3>4.4. Obtener resultados en vivo</h3>
 
 <p>Todavía no logré hacer funcionar el siguiente comando, pero se utilizar para no tener que grabar los tests sino hablarlos directamente y probar distintas combinaciones.</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -C Configs/Live.config -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones-with-sp.list
 </code></pre>
+
+<h2>Preguntas? Comentarios?</h2>
+
+<p>Ante cualquier duda o comentario, enviar un email a <a href="mailto:pbrusco@manas.com.ar">pbrusco@manas.com.ar</a> o <a href="mailto:pablo.brusco@gmail.com">pablo.brusco@gmail.com</a></p>
+
+<p>Gracias!</p>
       </section>
     </div>
 
