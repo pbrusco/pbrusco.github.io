@@ -144,7 +144,7 @@ sudo apt-get install libx11-dev:i386
 <p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
 
 <pre><code>$digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
-( SENT-START ( &lt;$digito&gt; ) SENT-END )
+( SENT-START ( &lt;{SILENCE} $digito {SILENCE}&gt; ) SENT-END )
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/grammar?at=master">Dictionary/DictionarySources/grammar</a></p>
@@ -560,21 +560,19 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 
 <h3>4.2. Generar vectores MFCC</h3>
 
-<p>Primero, debemos, al igual que con los datos de entrenamiento, listar los archivos de test que poseemos, por ejemplo</p>
+<p>Primero, debemos, al igual que con los datos de entrenamiento, listar los archivos de test que poseemos:</p>
+
+<pre><code>irb Helpers/generate_hcopy_tests_script.rb 
+</code></pre>
+
+<p>Que genera un archivo de la pinta</p>
 
 <pre><code>./Data/Recorded/waves/tests/0.wav ./Data/Test/0.mfc
-./Data/Recorded/waves/tests/1.wav ./Data/Test/1.mfc
-./Data/Recorded/waves/tests/2.wav ./Data/Test/2.mfc
-./Data/Recorded/waves/tests/3.wav ./Data/Test/3.mfc
-./Data/Recorded/waves/tests/4.wav ./Data/Test/4.mfc
-./Data/Recorded/waves/tests/5.wav ./Data/Test/5.mfc
-./Data/Recorded/waves/tests/6.wav ./Data/Test/6.mfc
-./Data/Recorded/waves/tests/7.wav ./Data/Test/7.mfc
-./Data/Recorded/waves/tests/8.wav ./Data/Test/8.mfc
 ./Data/Recorded/waves/tests/9.wav ./Data/Test/9.mfc
 ./Data/Recorded/waves/tests/12151516790.wav ./Data/Test/12151516790.mfc
 ./Data/Recorded/waves/tests/64.wav ./Data/Test/64.mfc
 ./Data/Recorded/waves/tests/111111111.wav ./Data/Test/111111111.mfc
+...
 </code></pre>
 
 <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopyTests.script?at=master">Scripts/HCopyTests.script</a></p>
