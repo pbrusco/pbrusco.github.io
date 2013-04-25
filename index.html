@@ -9,14 +9,15 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/bootstrap.css">
     <link rel="stylesheet" type="text/css" media="screen" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/jquery.tocify.css">
 
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     <script src="javascripts/jquery.tocify.min.js"></script>
     <script>
       $(function() {
-        //Calls the tocify method on your HTML div. { showAndHide: false}
-        $("#toc").tocify();
+        //Calls the tocify method on your HTML div.
+        $("#toc").tocify({ selectors: "h1,h2", showAndHide: true});
         });
     </script>
 
@@ -25,6 +26,7 @@
 
   <body>
     <!-- HEADER -->
+
     <div id="header_wrap" class="outer">
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/pbrusco">View on GitHub</a>
@@ -37,14 +39,11 @@
 
 
     <!-- MAIN CONTENT -->
+
     <div id="main_content_wrap" class="outer">
-      <div class="row-fluid">
-        <div class="span3">
-          <div class="well">
-            <div id="toc" class="bs-docs-sidebar"></div>
-          </div>
-        </div>
-        <div class="span7">
+      
+      <div id="toc"></div>
+
       <section id="main_content" class="inner">
 
         <h1>Bienvenidos</h1>
@@ -673,7 +672,6 @@ ENORMALISE = F
 
 <p>Gracias!</p>
       </section>
-      </div>
 
     </div>
 
