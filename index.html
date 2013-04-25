@@ -15,8 +15,8 @@
     <script src="javascripts/jquery.tocify.min.js"></script>
     <script>
       $(function() {
-        //Calls the tocify method on your HTML div.
-        $("#toc").tocify({ showAndHide: false});
+        //Calls the tocify method on your HTML div. { showAndHide: false}
+        $("#toc").tocify();
         });
     </script>
 
@@ -49,9 +49,9 @@
 
         <h1>Bienvenidos</h1>
 
-<p>A continuación implementaremos un reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+<p>A continuación implementaremos un (simple) reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
 
-<p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9. </p>
+<p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9 utilizando un subconjunto de las posiblidades que brinda HTK. </p>
 
 <p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/e393a5db8f242bb9b173f570fdd06554be5aa968/HTK/spike%20digitos?at=master">repositorio.</a></p>
 
@@ -65,7 +65,20 @@
 <p>obtener la transcripción de los dígitos, por ejemplo</p>
 
 <p><strong>Salida</strong>
-"1 2 1 5 1 5 1 6 7 9 0"</p>
+<pre>
+0 t1 UNO 
+t1 t2 DOS 
+t2 t3 UNO 
+t3 t4 CINCO 
+t4 t5 UNO 
+t5 t6 CINCO 
+t6 t7 UNO 
+t7 t8 SEIS 
+t8 t9 SIETE 
+t9 t10 NUEVE 
+t10 t11 CERO
+</pre>
+</p>
 
 <h2>Preámbulos</h2>
 
