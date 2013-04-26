@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Reconocimiento de Dígitos en Castellano utilizando HTK : htk, reconocimiento de dígitos, español, castellano, speech-recognition, machine learning" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/bootstrap.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/jquery.tocify.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/custom.css">
+
 
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
@@ -17,7 +19,7 @@
     <script>
       $(function() {
         //Calls the tocify method on your HTML div.
-        $("#toc").tocify({ selectors: "h1,h2", showAndHide: true});
+        $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true});
         });
     </script>
 
@@ -31,7 +33,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/pbrusco">View on GitHub</a>
 
-          <h1 id="project_title">Reconocimiento de Dígitos en Castellano utilizando HTK</h1>
+          <h2 id="project_title">Reconocimiento de Dígitos en Castellano utilizando HTK</h2>
           <br/><span id="project_tagline">htk, reconocimiento de dígitos, español, castellano, speech-recognition, machine learning</span>
 
         </header>
@@ -46,7 +48,7 @@
 
       <section id="main_content" class="inner">
 
-        <h1>Bienvenidos</h1>
+        <h1 style="margin-top:0px !important">Bienvenidos</h1>
 
 <p>A continuación implementaremos un (simple) reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
 
@@ -150,7 +152,7 @@ sudo apt-get install libx11-dev:i386
 
 <h1>Implementación</h1>
 
-<h2>Idea general</h2>
+<h2>0. Idea general</h2>
 
 <p>La implementación de este reconocedor constará de 4 pasos esenciales:</p>
 
