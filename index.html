@@ -18,8 +18,23 @@
     <script src="javascripts/jquery.tocify.min.js"></script>
     <script>
       $(function() {
-        //Calls the tocify method on your HTML div.
         $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true, extendPage: false});
+        //Calls the tocify method on your HTML div.
+
+        var stickyTop = $('#toc').offset().top; // returns number 
+ 
+        $(window).scroll(function(){ // scroll event  
+       
+          var windowTop = $(window).scrollTop(); // returns number
+       
+          if (stickyTop < windowTop) {
+            $('#toc').css({ position: 'fixed', top: 0 });
+          }
+          else {
+            $('#toc').css('position','static');
+          }
+       
+        });
         });
     </script>
 
@@ -44,7 +59,7 @@
 
     <div id="main_content_wrap" class="outer">
       
-      <div id="toc" data-offset-top="2"></div>
+      <div id="toc"></div>
 
       <section id="main_content" class="inner">
 
