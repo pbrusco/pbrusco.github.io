@@ -16,26 +16,13 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
     <script src="javascripts/jquery.tocify.min.js"></script>
+    <script src="javascripts/bootstrap.js"></script>
     <script>
       $(function() {
         $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true, extendPage: false});
         //Calls the tocify method on your HTML div.
-
-        var stickyTop = $('#toc').offset().top; // returns number 
- 
-        $(window).scroll(function(){ // scroll event  
-       
-          var windowTop = $(window).scrollTop(); // returns number
-       
-          if (stickyTop < windowTop) {
-            $('#toc').css({ position: 'fixed', top: 0 });
-          }
-          else {
-            $('#toc').css('position','static');
-          }
-       
-        });
-        });
+        $("#toc").affix({offset: 300});
+       });
     </script>
 
     <title>Reconocimiento de Dígitos en Castellano utilizando HTK</title>
@@ -58,11 +45,8 @@
     <!-- MAIN CONTENT -->
 
     <div id="main_content_wrap" class="outer">
-      
       <div id="toc"></div>
-
       <section id="main_content" class="inner">
-
         <h1 style="margin-top:0px !important">Bienvenidos</h1>
 
 <p>A continuación implementaremos un (simple) reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>

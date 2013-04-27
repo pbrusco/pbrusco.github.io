@@ -8,3 +8,11 @@
   #toc{
   	margin-top: 2%;
   }
+
+  #toc.affix {
+  	top: 0;
+  }  
+
+  #toc.affix-top {
+  	position:relative !important;
+  }
