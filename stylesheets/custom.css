@@ -20,3 +20,7 @@
   #toc.affix-top {
     position:absolute !important
   }
+
+  code {
+    font-size:12px;
+  }
