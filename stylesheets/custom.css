@@ -6,12 +6,16 @@
   }
 
   #toc{
-  	margin-top: 2%;
+  	margin-top: 2%
   }
 
   #toc.affix {
   	top: 2%;
-  }  
+  } 
+
+  #toc.affix-bottom {
+    top: 2%;
+  }   
 
   #toc.affix-top {
     position:absolute !important
