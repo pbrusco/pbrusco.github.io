@@ -259,7 +259,7 @@ UNO u n o sp
 <p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
 
 <pre><code>sudo gem install waveinfo
-irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
+Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
 
 <p>Este script escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
@@ -314,7 +314,7 @@ sp
 
 <p>Primero, crearemos el archivo "train-words.mlf"</p>
 
-<pre><code>irb Helpers/generate_word_mlf_from_training.rb
+<pre><code>Helpers/generate_word_mlf_from_training.rb
 </code></pre>
 
 <p>Esto genera un archivo de la pinta</p>
@@ -409,7 +409,7 @@ sil
 
 <p>Por ejemplo, antes de correr el comando HCopy, utilizaremos el siguiente comando</p>
 
-<pre><code>irb Helpers/generate_hcopy_script.rb
+<pre><code>Helpers/generate_hcopy_script.rb
 </code></pre>
 
 <p>Este comando, crea un archivo de la pinta:</p>
@@ -512,7 +512,7 @@ ENORMALISE = F
 
 <p>Y un listado correspondiente para este archivo</p>
 
-<pre><code>irb Helpers/generate_hcompv_script.rb
+<pre><code>Helpers/generate_hcompv_script.rb
 </code></pre>
 
 <p>Que genera algo como: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCompV.script?at=master">Scripts/HCompV.script</a></p>
@@ -567,7 +567,7 @@ HMMPrototipo
 
 <p>Ahora si, ya tenemos un modelo prototípico del cual partir. Como hicimos anteriormente, generamos el listado necesario para el comando que utilizaremos, en este caso, HERest</p>
 
-<pre><code>irb Helpers/generate_herest_script.rb
+<pre><code>Helpers/generate_herest_script.rb
 </code></pre>
 
 <p>Ahora, re-estimaremos el modelo usando la herramienta para "embedded re-estimation" HERest</p>
@@ -605,7 +605,7 @@ HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 1
 
 <p>Primero, debemos, al igual que con los datos de entrenamiento, listar los archivos de test que poseemos:</p>
 
-<pre><code>irb Helpers/generate_hcopy_tests_script.rb 
+<pre><code>Helpers/generate_hcopy_tests_script.rb 
 </code></pre>
 
 <p>Que genera un archivo de la pinta</p>
@@ -649,7 +649,7 @@ ENORMALISE = F
 
 <p>Para testear contra el modelo entrenado, utilizaremos el comando <code>HVite</code>, para lo cual necesitamos el listado de archivos de entrenamiento:</p>
 
-<pre><code>irb Helpers/generate_hvite_script.rb 
+<pre><code>Helpers/generate_hvite_script.rb 
 </code></pre>
 
 <p>Este comando, crea un archivo de la pinta:</p>
