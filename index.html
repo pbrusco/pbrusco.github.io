@@ -63,7 +63,7 @@
 
 <p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9 utilizando un subconjunto de las posiblidades que brinda HTK. </p>
 
-<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/e393a5db8f242bb9b173f570fdd06554be5aa968/HTK/spike%20digitos?at=master">repositorio.</a></p>
+<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos?at=master">repositorio.</a></p>
 
 <h3>Hacia dónde vamos?</h3>
 
@@ -147,9 +147,9 @@ sudo apt-get install libx11-dev:i386
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
-<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/code_organization.txt?at=master">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/code_organization.txt?at=master">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
 
-<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://gist.github.com/pbrusco/5389168">crear_estructura.bash</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers?at=master">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./crear_estructura.bash</code>.</p>
+<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://gist.github.com/pbrusco/5389168">crear_estructura.bash</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers?at=master">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./crear_estructura.bash</code>.</p>
 
 <p>Recomiendo también, utilizar un buen sistema de control de versiones (git, hg, svn, etc) para hacer commits ante cada paso logrado y así estar más preparados ante un olvido o un error en el proceso. </p>
 
@@ -190,7 +190,7 @@ sudo apt-get install libx11-dev:i386
 ( SENT-START ( &lt;{SILENCE} $digito {SILENCE}&gt; ) SENT-END )
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/grammar?at=master">Dictionary/DictionarySources/grammar</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/grammar?at=master">Dictionary/DictionarySources/grammar</a></p>
 
 <p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
@@ -212,7 +212,7 @@ TRES
 UNO
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/words-sorted.list?at=master">Dictionary/DictionarySources/words-sorted.list</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/words-sorted.list?at=master">Dictionary/DictionarySources/words-sorted.list</a></p>
 
 <h3>1.3. Diccionario de fonemas</h3>
 
@@ -233,13 +233,13 @@ TRES t r e s sp
 UNO u n o sp
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
 <p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios). </p>
 
-<p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train1/seis.wav?at=master">Data/Recorded/waves/train/train1/seis.wav</a></p>
+<p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train1/seis.wav?at=master">Data/Recorded/waves/train/train1/seis.wav</a></p>
 
 <p>Para lograr compatibilidad con HTK, usaremos el siguiente formato para grabar (entre paréntesis indico donde encontrar la opción si utilizamos Audacity 2.0.3):</p>
 
@@ -254,16 +254,16 @@ UNO u n o sp
 <pre><code>0.0 0.5064375  o ch o
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train1-ocho.lab?at=master">Data/Train/train1-ocho.lab</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train/train1-ocho.lab?at=master">Data/Train/train1-ocho.lab</a></p>
 
-<p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
+<p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
 
 <pre><code>sudo gem install waveinfo
 irb Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
 </code></pre>
 
 <p>Este script escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
-Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Recorded/waves/train/train5?at=master">train5</a> por ejemplo) el script copia estas transcripciones agregándoles en el nombre, el prefijo de la subcarpeta correspondiente. Se puede ver un ejemplo de este caso en <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train/train5-siete.lab?at=master">Data/Train/train5-siete</a>, notar que el .lab no fue generado automaticamente sino copiado de la carpeta train5. </p>
+Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a> por ejemplo) el script copia estas transcripciones agregándoles en el nombre, el prefijo de la subcarpeta correspondiente. Se puede ver un ejemplo de este caso en <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train/train5-siete.lab?at=master">Data/Train/train5-siete</a>, notar que el .lab no fue generado automaticamente sino copiado de la carpeta train5. </p>
 
 <h2>2. Combinando los datos</h2>
 
@@ -287,7 +287,7 @@ SENT-START [] sil
 SILENCE sil
 </code></pre>
 
-<p>Quedando finalmente: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a></p>
+<p>Quedando finalmente: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.dict?at=master">Dictionary/phones.dict</a></p>
 
 <p>Y también, agregaremos al archivo <code>Dictionary/phones-with-sp.list</code>, las siguiente lineas </p>
 
@@ -295,9 +295,9 @@ SILENCE sil
 sp
 </code></pre>
 
-<p>Quedando finalmente: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones-with-sp.list?at=master">Dictionary/phones-with-sp.list</a></p>
+<p>Quedando finalmente: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones-with-sp.list?at=master">Dictionary/phones-with-sp.list</a></p>
 
-<p>Luego, debemos crear un nuevo archivo copiando Dictionary/phones-with-sp.list en el cual borremos la linea que contiene al fonema "sp", generando así el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a></p>
+<p>Luego, debemos crear un nuevo archivo copiando Dictionary/phones-with-sp.list en el cual borremos la linea que contiene al fonema "sp", generando así el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a></p>
 
 <h3>2.2. Gramática a WordNet</h3>
 
@@ -345,7 +345,7 @@ CINCO
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/train%20MFCCs-words.mlf?at=master">Data/train MFCCs-words.mlf</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/train%20MFCCs-words.mlf?at=master">Data/train MFCCs-words.mlf</a></p>
 
 <p>Luego asegurarse que cada elemento contenga la transcripción a nivel palabras de lo que cada .wav contiene (el script lo hace en base al nombre del archivo). </p>
 
@@ -359,7 +359,7 @@ DE sp
 
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HLEd.config?at=master">Configs/HLEd.config</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Configs/HLEd.config?at=master">Configs/HLEd.config</a></p>
 
 <p>Y luego, el comando propiamente dicho: </p>
 
@@ -399,7 +399,7 @@ sil
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/train%20MFCCs-phones.mlf?at=master">Data/train MFCCs-phones.mlf</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/train%20MFCCs-phones.mlf?at=master">Data/train MFCCs-phones.mlf</a></p>
 
 <h3>2.4. Mel Frequency Cepstral Coefficients (MFCCs)</h3>
 
@@ -423,7 +423,7 @@ sil
 ./Data/Recorded/waves/train/train1/seis.wav  ./Data/Train/train1-seis.mfc 
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopy.script?at=master">Scripts/HCopy.script</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCopy.script?at=master">Scripts/HCopy.script</a></p>
 
 <p>Luego, necesitamos generar el archivo de configuración HCopy.config</p>
 
@@ -444,14 +444,14 @@ ENORMALISE = F
 
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HCopy.config?at=master">Configs/HCopy.config</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Configs/HCopy.config?at=master">Configs/HCopy.config</a></p>
 
 <p>Finalmente, podemos correr HCopy para traducir de wavs a mfccs: </p>
 
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
 
-<p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
+<p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
 
 <h3>2.5. Generación de un modelo prototípico</h3>
 
@@ -488,7 +488,7 @@ ENORMALISE = F
 
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/prototype?at=master">Models/prototype</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/prototype?at=master">Models/prototype</a></p>
 
 <p>Luego, necesitamos un archivo de configuración para el comando que utilizaremos:</p>
 
@@ -508,25 +508,25 @@ ENORMALISE = F
 
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Config/HCompV.config?at=master">Configs/HCompV.config</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Config/HCompV.config?at=master">Configs/HCompV.config</a></p>
 
 <p>Y un listado correspondiente para este archivo</p>
 
 <pre><code>irb Helpers/generate_hcompv_script.rb
 </code></pre>
 
-<p>Que genera algo como: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCompV.script?at=master">Scripts/HCompV.script</a></p>
+<p>Que genera algo como: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCompV.script?at=master">Scripts/HCompV.script</a></p>
 
 <p>Ahora si, podemos utilizar el comando para crear nuestro primer modelo entrenado a partir de los datos</p>
 
 <pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
 </code></pre>
 
-<p>Esto genera 2 archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a> que nos serán utiles en el próximo paso.</p>
+<p>Esto genera 2 archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a> que nos serán utiles en el próximo paso.</p>
 
 <h3>2.6. Generación del primer modelo</h3>
 
-<p>Una vez que tenemos los archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
+<p>Una vez que tenemos los archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
 
 <p>Ejemplo, el prototipo tiene la forma </p>
 
@@ -541,7 +541,7 @@ ENORMALISE = F
 
 <p>Donde llamaré HMMPrototipo a lo que esta entre &lt;BeginHMM&gt; y &lt;EndHMM&gt; incluyendo estas etiquetas</p>
 
-<p>Crearemos otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
+<p>Crearemos otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
 
 <pre><code>~h "c"
 HMMPrototipo
@@ -550,7 +550,7 @@ HMMPrototipo
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/hmmdefs?at=master">Models/hmm0/hmmdefs</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/hmmdefs?at=master">Models/hmm0/hmmdefs</a></p>
 
 <p>Finalmente, copiaremos el archivo Models/hmm0/vFloors a uno nuevo llamado macro agregando el siguiente header: </p>
 
@@ -559,7 +559,7 @@ HMMPrototipo
 &lt;VECSIZE&gt; 39&lt;NULLD&gt;&lt;MFCC_D_A_0&gt;&lt;DIAGC&gt;
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Models/hmm0/macros?at=master">Models/hmm0/macros</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/macros?at=master">Models/hmm0/macros</a></p>
 
 <h2>3. Entrenamiento del modelo</h2>
 
@@ -618,7 +618,7 @@ HERest -T 1 -C Configs/HERest.config -I Data/train\ MFCCs-phones.mlf -t 1000.0 1
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HCopyTests.script?at=master">Scripts/HCopyTests.script</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCopyTests.script?at=master">Scripts/HCopyTests.script</a></p>
 
 <p>Luego, generar el archivo de configuración:</p>
 
@@ -638,7 +638,7 @@ NUMCEPS = 12
 ENORMALISE = F
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Configs/HCopyTests.config?at=master">Configs/HCopyTests.config</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Configs/HCopyTests.config?at=master">Configs/HCopyTests.config</a></p>
 
 <p>Y finalmente, los MFCCs a partir de los wavs:</p>
 
@@ -661,7 +661,7 @@ ENORMALISE = F
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/Scripts/HVite.script?at=master">Scripts/HVite.script</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HVite.script?at=master">Scripts/HVite.script</a></p>
 
 <p>Y finalmente: </p>
 
@@ -809,7 +809,7 @@ ENORMALISE = F
 .
 
 </code></pre>
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/HTK/spike%20digitos/recout.mlf?at=master">recout.mlf</a></p>
+<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/recout.mlf?at=master">recout.mlf</a></p>
 
 <p>Podrás mejorarlo? :)</p>
 
