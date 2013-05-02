@@ -141,7 +141,7 @@ sudo apt-get install libx11-dev:i386
 
 <p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) y <a href="http://rubygems.org/pages/download">RubyGems</a></p>
 
-<p><strong>Aclaración importante</strong> Todos los scripts hechos en ruby, son simplemente automatizaciones de procesos que se pueden hacer tranquilamente a mano e incluso, la mayoría necesitan de un simple editor de texto. Recomiendo intentar realizar a mano el proceso antes (o incluso después) de correr los .irb para entender que funcionalidad aplican.</p>
+<p><strong>Aclaración importante</strong> Todos los scripts hechos en ruby, son simplemente automatizaciones de procesos que se pueden hacer tranquilamente a mano e incluso, la mayoría necesitan de un simple editor de texto. Recomiendo intentar realizar a mano el proceso antes (o incluso después) de correr los .rb para entender que funcionalidad aplican.</p>
 
 <h3>Organización del código</h3>
 
@@ -528,7 +528,12 @@ ENORMALISE = F
 
 <p>Una vez que tenemos los archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
 
-<p>Ejemplo, el prototipo tiene la forma </p>
+<p>Para lograrlo, podemos utilizar el script de bash: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/create_hmm_defs.sh?at=master">Helpers/create_hmm_defs.sh</a></p>
+
+  <pre><code>Helpers/create_hmm_defs.sh</pre></code>
+
+
+<p>Que lo que hace es distribuir el prototipo para cada fonema. Por ejemplo, si el prototipo tiene la forma </p>
 
 <pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;  
   ~h "prototype"
@@ -541,7 +546,7 @@ ENORMALISE = F
 
 <p>Donde llamaré HMMPrototipo a lo que esta entre &lt;BeginHMM&gt; y &lt;EndHMM&gt; incluyendo estas etiquetas</p>
 
-<p>Crearemos otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
+<p>Creará otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
 
 <pre><code>~h "c"
 HMMPrototipo
