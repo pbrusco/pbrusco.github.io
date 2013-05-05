@@ -186,7 +186,8 @@ sudo apt-get install libx11-dev:i386
 
 <p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
 
-<pre><code>$digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
+<pre><code>
+  $digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
 ( SENT-START ( &lt;{SILENCE} $digito {SILENCE}&gt; ) SENT-END )
 </code></pre>
 
@@ -363,7 +364,7 @@ DE sp
 
 <p>Y luego, el comando propiamente dicho: </p>
 
-<pre><code>HLEd -l ’*’ -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data/train-words.mlf
+<pre><code>HLEd -l '*' -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data/train-words.mlf
 </code></pre>
 
 <p>Que genera un archivo de la pinta:</p>
