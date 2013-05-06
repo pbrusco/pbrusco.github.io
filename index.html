@@ -18,16 +18,35 @@
     <script src="javascripts/jquery.tocify.min.js"></script>
     <script src="javascripts/bootstrap.js"></script>
     <script>
+      function take_lines(number, data){
+        var arr = data.split('\n');
+        var text = "";
+        for (var i = 0; i < arr.length; i++) {
+          if (i<number){
+            text = text + arr[i] + "\n";
+          }else{
+            text = text + "...";
+            break;
+          }
+        }
+        return text;
+      }
       function render_extern_code(){
         $( "includecode" ).each(function( code ) {
           var name = $(this).attr('name');
-          var id = $(this).attr('id');
           var elem = $(this)
+          var full = $(this).data('full');
           $.ajax({                                                                                      
             url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/master/Spikes/digitos/"+name,  
             dataType: 'jsonp',                                                                          
-            success: function(data){                                                                    
-              elem.replaceWith('<pre><code>'+ data + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a></p>');
+            success: function(data){    
+              if (!full){
+                var text = take_lines(20,data);
+              }else{
+                var text = data;
+              }
+              var escaped = $('<div/>').text(text).html();
+              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a></p>');
             }                                                                                           
           });
         });
@@ -205,7 +224,7 @@ sudo apt-get install libx11-dev:i386
 
 <p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
 
-<includecode id="grammar" name="Dictionary/DictionarySources/grammar"></includecode>
+<includecode name="Dictionary/DictionarySources/grammar"></includecode>
 
 
 <p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
@@ -216,19 +235,8 @@ sudo apt-get install libx11-dev:i386
 
 <p>En este paso debemos listar todas las posibles palabras de nuestra gramática (ordenadas alfabeticamente). Para ello, podemos listarlas y luego aplicar el comando "sort" de unix. </p>
 
-<pre><code>CERO
-CINCO
-CUATRO
-DOS
-NUEVE
-OCHO
-SEIS
-SIETE
-TRES
-UNO
-</code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/words-sorted.list?at=master">Dictionary/DictionarySources/words-sorted.list</a></p>
+<includecode name="Dictionary/DictionarySources/words-sorted.list"></includecode>
 
 <h3>1.3. Diccionario de fonemas</h3>
 
@@ -237,19 +245,7 @@ UNO
 
 <p>Por lo tanto, el diccionario tendrá la siguiente pinta:</p>
 
-<pre><code>CERO s e r o sp
-CINCO s i n c o sp
-CUATRO k u a t r o sp
-DOS d o s sp
-NUEVE n u e b e sp
-OCHO o ch o sp
-SEIS s e i s sp
-SIETE s i e t e sp
-TRES t r e s sp
-UNO u n o sp
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/dict?at=master">Dictionary/DictionarySources/dict</a></p>
+<includecode name="Dictionary/DictionarySources/dict"></includecode>
 
 <h3>1.4. Grabando datos de entrenamiento</h3>
 
@@ -267,10 +263,8 @@ UNO u n o sp
 
 <p>En vez de hacerlo manualmente, aprovecharemos un script que se encargará de facilitarnos ese trabajo, pero en caso de no tener este script, habría que construirlos manualmente con la pinta:</p>
 
-<pre><code>0.0 0.5064375  o ch o
-</code></pre>
+<includecode name="Data/Train/train1-ocho.lab"></includecode>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train/train1-ocho.lab?at=master">Data/Train/train1-ocho.lab</a></p>
 
 <p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
 
@@ -334,34 +328,7 @@ sp
 </code></pre>
 
 <p>Esto genera un archivo de la pinta</p>
-
-<pre><code>#!MLF!#
-"*/train1-cero.lab"
-CERO
-.
-"*/train1-cinco.lab"
-CINCO
-.
-"*/train1-cuatro.lab"
-CUATRO
-.
-"*/train1-dos.lab"
-DOS
-.
-"*/train1-uno.lab"
-UNO
-.
-"*/train2-cero.lab"
-CERO
-.
-"*/train2-cinco.lab"
-CINCO
-.
-"*/train2-cuatro.lab"
-...
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/train-words.mlf?at=master">Data/train-words.mlf</a></p>
+<includecode name="Data/train-words.mlf"></includecode>
 
 <p>Luego asegurarse que cada elemento contenga la transcripción a nivel palabras de lo que cada .wav contiene (el script lo hace en base al nombre del archivo). </p>
 
@@ -369,13 +336,7 @@ CINCO
 
 <p>Primero, generaremos un archivo de configuración con la siguiente pinta:</p>
 
-<pre><code>EX
-IS sil sil
-DE sp
-
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Configs/HLEd.config?at=master">Configs/HLEd.config</a></p>
+<includecode name="Configs/HLEd.config"></includecode>
 
 <p>Y luego, el comando propiamente dicho: </p>
 
@@ -384,38 +345,7 @@ DE sp
 
 <p>Que genera un archivo de la pinta:</p>
 
-<pre><code>#!MLF!#
-"’*’/train1-cero.lab"
-sil
-s
-e
-r
-o
-sil
-.
-"’*’/train1-cinco.lab"
-sil
-s
-i
-n
-c
-o
-sil
-.
-"’*’/train1-cuatro.lab"
-sil
-k
-u
-a
-t
-r
-o
-sil
-.
-...
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/train-phones.mlf?at=master">Data/train-phones.mlf</a></p>
+<includecode name="Data/train-phones.mlf"></includecode>
 
 <h3>2.4. Mel Frequency Cepstral Coefficients (MFCCs)</h3>
 
@@ -430,37 +360,11 @@ sil
 
 <p>Este comando, crea un archivo de la pinta:</p>
 
-<pre><code>./Data/Recorded/waves/train/train1/cero.wav  ./Data/Train/train1-cero.mfc 
-./Data/Recorded/waves/train/train1/cinco.wav  ./Data/Train/train1-cinco.mfc 
-./Data/Recorded/waves/train/train1/cuatro.wav  ./Data/Train/train1-cuatro.mfc 
-./Data/Recorded/waves/train/train1/dos.wav  ./Data/Train/train1-dos.mfc 
-./Data/Recorded/waves/train/train1/nueve.wav  ./Data/Train/train1-nueve.mfc 
-./Data/Recorded/waves/train/train1/ocho.wav  ./Data/Train/train1-ocho.mfc 
-./Data/Recorded/waves/train/train1/seis.wav  ./Data/Train/train1-seis.mfc 
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCopy.script?at=master">Scripts/HCopy.script</a></p>
+<includecode name="Scripts/HCopy.script"></includecode>
 
 <p>Luego, necesitamos generar el archivo de configuración HCopy.config</p>
 
-<pre><code># Coding parameters
-SOURCEKIND = WAVEFORM
-SOURCEFORMAT = WAV
-TARGETKIND = MFCC_0
-TARGETRATE = 100000.0
-SAVECOMPRESSED = T
-SAVEWITHCRC = T
-WINDOWSIZE = 250000.0
-USEHAMMING = T
-PREEMCOEF = 0.97
-NUMCHANS = 26
-CEPLIFTER = 22
-NUMCEPS = 12
-ENORMALISE = F
-
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Configs/HCopy.config?at=master">Configs/HCopy.config</a></p>
+<includecode name="Configs/HCopy.config"></includecode>
 
 <p>Finalmente, podemos correr HCopy para traducir de wavs a mfccs: </p>
 
@@ -475,36 +379,7 @@ ENORMALISE = F
 
 <p>Lo primero que hay que hacer es crear un nuevo archivo que contenga lo siguiente:</p>
 
-<pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;  
-  ~h "prototype"
-&lt;BeginHMM&gt;
-  &lt;NumStates&gt; 5
-  &lt;State&gt; 2 
-    &lt;Mean&gt; 39
-      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-    &lt;Variance&gt; 39
-      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
-  &lt;State&gt; 3
-    &lt;Mean&gt; 39
-      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-    &lt;Variance&gt; 39
-      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
-  &lt;State&gt; 4
-    &lt;Mean&gt; 39
-      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-    &lt;Variance&gt; 39
-      1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0
-  &lt;TransP&gt; 5
-   0.000e+0   1.000e+0   0.000e+0   0.000e+0   0.000e+0
-   0.000e+0   6.000e-1   4.000e-1   0.000e+0   0.000e+0
-   0.000e+0   0.000e+0   6.000e-1   4.000e-1   0.000e+0
-   0.000e+0   0.000e+0   0.000e+0   6.000e-1   4.000e-1
-   0.000e+0   0.000e+0   0.000e+0   0.000e+0   0.000e+0
-&lt;EndHMM&gt;
-
-</code></pre>
-
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/prototype?at=master">Models/prototype</a></p>
+<includecode data-full="true" name="Models/prototype"></includecode>
 
 <p>Luego, necesitamos un archivo de configuración para el comando que utilizaremos:</p>
 
