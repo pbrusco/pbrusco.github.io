@@ -18,10 +18,28 @@
     <script src="javascripts/jquery.tocify.min.js"></script>
     <script src="javascripts/bootstrap.js"></script>
     <script>
+      function render_extern_code(){
+        $( "includecode" ).each(function( code ) {
+          var name = $(this).attr('name');
+          var id = $(this).attr('id');
+          var elem = $(this)
+          $.ajax({                                                                                      
+            url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/master/Spikes/digitos/"+name,  
+            dataType: 'jsonp',                                                                          
+            success: function(data){                                                                    
+              elem.replaceWith('<pre><code>'+ data + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a></p>');
+            }                                                                                           
+          });
+        });
+      }
+    </script>
+    <script>
       $(function() {
         $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true, extendPage: false});
         //Calls the tocify method on your HTML div.
         $("#toc").affix({offset: 300});
+       
+        render_extern_code();
        });
     </script>
 
@@ -58,6 +76,7 @@
       <div id="toc"></div>
       <section id="main_content" class="inner">
         <h1 style="margin-top:0px !important">Bienvenidos</h1>
+
 
 <p>A continuación implementaremos un (simple) reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
 
@@ -186,12 +205,8 @@ sudo apt-get install libx11-dev:i386
 
 <p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
 
-<pre><code>
-  $digito = UNO | DOS | TRES | CUATRO | CINCO | SEIS | SIETE | OCHO | NUEVE | CERO;
-( SENT-START ( &lt;{SILENCE} $digito {SILENCE}&gt; ) SENT-END )
-</code></pre>
+<includecode id="grammar" name="Dictionary/DictionarySources/grammar"></includecode>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/DictionarySources/grammar?at=master">Dictionary/DictionarySources/grammar</a></p>
 
 <p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
 
