@@ -24,3 +24,12 @@
   code {
     font-size:12px;
   }
+
+  pre.error {
+    color: red;
+    border-color: red;
+  }
+
+  p.blue{
+    color: blue;
+  }

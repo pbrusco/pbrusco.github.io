@@ -39,7 +39,12 @@
           $.ajax({                                                                                      
             url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/master/Spikes/digitos/"+name,  
             dataType: 'jsonp',                                                                          
-            success: function(data){    
+            success: function(data){  
+              if(data.substring(0, 15) == "<!DOCTYPE html>"){
+                elem.replaceWith('<pre class="error"><code>Error obteniendo: </br> https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master <p class="blue">Por favor contactame para que lo arregle:  pbrusco@manas.com.ar</p>');
+                return;
+              }
+
               if (!full){
                 var text = take_lines(20,data);
               }else{
