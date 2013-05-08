@@ -33,10 +33,12 @@
       }
       function render_links(){
    
-        $( "linkto").each(function(code)){
-          var name = $(this).attr('name');
-          $(this).replaceWith('<a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a>');
-        });
+        $("linkto").each(
+            (function(code){
+              var name = $(this).attr('name');
+              $(this).replaceWith('<a target="_blank" href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a>');
+            }
+          ));
 
       }
       function render_extern_code(){
@@ -65,7 +67,7 @@
                 var text = data;
               }
               var escaped = $('<div/>').text(text).html();
-              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a></p>');
+              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master" target="_blank">'+name+'</a></p>');
             }                                                                                           
           });
         });
@@ -270,7 +272,7 @@ sudo apt-get install libx11-dev:i386
 
 <p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios). </p>
 
-<p>Ejemplo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train1/seis.wav?at=master">Data/Recorded/waves/train/train1/seis.wav</a></p>
+<p>Ejemplo: <linkto name="Data/Recorded/waves/train/train1/seis.wav"></linkto></p>
 
 <p>Para lograr compatibilidad con HTK, usaremos el siguiente formato para grabar (entre paréntesis indico donde encontrar la opción si utilizamos Audacity 2.0.3):</p>
 
@@ -392,7 +394,7 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 <pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
 </code></pre>
 
-<p>Si todo salió bien, deberíamos tener la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train?at=master">Data/Train</a> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
+<p>Si todo salió bien, deberíamos tener la carpeta <linkto name="Data/Train"></linkto> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
 
 <h3>2.5. Generación de un modelo prototípico</h3>
 
@@ -412,7 +414,7 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 <pre><code>Helpers/generate_hcompv_script.rb
 </code></pre>
 
-<p>Que genera algo como: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Scripts/HCompV.script?at=master">Scripts/HCompV.script</a></p>
+<p>Que genera algo como: <linkto name="Scripts/HCompV.script"></linkto></p>
 
 <p>Ahora si, podemos utilizar el comando para crear nuestro primer modelo entrenado a partir de los datos</p>
 
@@ -425,7 +427,7 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 
 <p>Una vez que tenemos los archivos <linkto name 'Models/hmm0/prototype'></linkto> y <linkto name 'Models/hmm0/vFloors'></linkto>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
 
-<p>Para lograrlo, podemos utilizar el script de bash: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/create_hmm_defs.sh?at=master">Helpers/create_hmm_defs.sh</a></p>
+<p>Para lograrlo, podemos utilizar el script de bash: <linkto name="Helpers/create_hmm_defs.sh"></linkto></p>
 
   <pre><code>Helpers/create_hmm_defs.sh</pre></code>
 
@@ -443,7 +445,7 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 
 <p>Donde llamaré HMMPrototipo a lo que esta entre &lt;BeginHMM&gt; y &lt;EndHMM&gt; incluyendo estas etiquetas</p>
 
-<p>Creará otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Dictionary/phones.list?at=master">Dictionary/phones.list</a>:</p>
+<p>Creará otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <linkto name="Dictionary/phones.list"></linkto>:</p>
 
 <pre><code>~h "c"
 HMMPrototipo
@@ -452,7 +454,7 @@ HMMPrototipo
 ...
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/hmmdefs?at=master">Models/hmm0/hmmdefs</a></p>
+<p>Nombre del archivo: <linkto name="Models/hmm0/hmmdefs"></linkto></p>
 
 <p>Finalmente, copiaremos el archivo Models/hmm0/vFloors a uno nuevo llamado macro agregando el siguiente header: </p>
 
@@ -461,7 +463,7 @@ HMMPrototipo
 &lt;VECSIZE&gt; 39&lt;NULLD&gt;&lt;MFCC_D_A_0&gt;&lt;DIAGC&gt;
 </code></pre>
 
-<p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/macros?at=master">Models/hmm0/macros</a></p>
+<p>Nombre del archivo: <linkto name="Models/hmm0/macros"></linkto></p>
 
 <h2>3. Entrenamiento del modelo</h2>
 
