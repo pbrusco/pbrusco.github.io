@@ -411,7 +411,8 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 
 <p>Y un script correspondiente para este archivo</p>
 
-<pre><code>Helpers/generate_hcompv_script.rb
+<pre><code>mkdir Models/hmm0
+Helpers/generate_hcompv_script.rb
 </code></pre>
 
 <p>Que genera algo como: <linkto name="Scripts/HCompV.script"></linkto></p>
@@ -481,10 +482,13 @@ HMMPrototipo
 
 <p>Por ejemplo, si queremos re-estimar 3 veces luego de generar el primer modelo, podemos correr: </p>
 
-<pre><code>HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
+<pre><code>mkdir Models/hmm1
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
 
+mkdir Models/hmm2
 HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
 
+mkdir Models/hmm3
 HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
 </code></pre>
 
@@ -493,14 +497,35 @@ Hasta este punto, generamos el modelo <linkto name="Models/hmm3"></linkto>.
 
 <h3>3.2. Generando mixtures de gausianas</h3>
 
-<p>En este punto, mejoraremos el modelo para las distribuciones probabilisticas que contiene cada estado deje de ser una gausianna y pase a ser un mixture de gaussianas, en <a href="http://www.comp.nus.edu.sg/~simkc/slides/lecture03.pdf">este link</a> hay una muy buena explicación del tema</p>
+<p>En este punto, mejoraremos el modelo para las distribuciones probabilisticas que contiene cada estado dejen de ser gausianas y pasen a ser mixtures de gausianas. En <a href="http://www.comp.nus.edu.sg/~simkc/slides/lecture03.pdf">este link</a> hay una muy buena explicación teórica del tema</p>
+
+<p>
+Entonces, en este momento modificaremos el modelo para generar mixtures, para ello necesitaremos el siguiente archivo de configuración:
+</p>
+
+<includecode name="Configs/HHEdIncrementMixtures.conf"></includecode>
+
+<p>Y luego, podemos correr el comando de generación de mixtures: </p>
+
+<pre><code>mkdir Models/hmm4
+HHEd -H Models/hmm3/macros -H Models/hmm3/hmmdefs -M Models/hmm4 Configs/HHEdIncMixs.conf Dictionary/phones.list</pre></code>
+
+<p> Que generara el 4to modelo: <linkto name="Models/hmm4"></linkto>. Este modelo ya contiene estados con distribuciones distintas a las anteriores, ahora solo falta seguir reentrenando de la misma forma en que hicimos en el paso 3.1 </p>
 
 
-<pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm5/macros -H Models/hmm5/hmmdefs -M Models/hmm6 Dictionary/phones.list
-HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones.list
+<pre><code>mkdir Models/hmm5
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Dictionary/phones.list
+
+mkdir Models/hmm6
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm5/macros -H Models/hmm5/hmmdefs -M Models/hmm6 Dictionary/phones.list
+
+mkdir Models/hmm7
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones.list
 </code></pre>
 
-<p><strong>Hasta aquí</strong> llegará el entrenamiento, sin embargo, en el tutorial de HTK existen más pasos que permiten seguir entrenando el modelo para conseguir mejor performance. </p>
+<p> Finalmente tenemos el 7mo modelo: <linkto name="Models/hmm7"></linkto> que es el que utilizaremos para hacer pruebas.</p>
+
+<p><strong>Hasta aquí</strong> llegará el entrenamiento, sin embargo, se puede seguir indefinidamente, incrementando mixtures, agregando otros n-gramas, etc. En el tutorial de HTK existen más pasos que permiten seguir entrenando el modelo para conseguir mejor performance. </p>
 
 <h2>4. Resultados</h2>
 
@@ -539,7 +564,7 @@ HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 1
 
 <includecode name="Scripts/HVite.script"></includecode>
 
-<p>Y finalmente: </p>
+<p>Y finalmente, probemos el ultimo modelo del que disponemos, en el caso de este tutorial es el 7.</p>
 
 <pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones.list
 </code></pre>
@@ -551,6 +576,9 @@ HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 1
 <includecode data-show-all="true" name="recout.mlf"></includecode>
 
 <p>Podrás mejorarlo? :)</p>
+
+<h2>5. Yapa</h2>
+Una vez que seguiste todo el tutorial y no tenes ganas de, ante algun cambio, volver a hacer todo, te recomiendo usar el script <linkto name="go.sh"></linkto> que ejecuta todos los pasos contenidos en este tutorial y algunos más al final.
 
 <h2>Preguntas? Comentarios?</h2>
 
