@@ -270,21 +270,14 @@ sudo apt-get install libx11-dev:i386
 <li>Mono (Edit\Preferences\Devices) </li>
 <li>16 kHz sampling frequency (Edit\Preferences\Quality\Sampling) </li>
 <li>16 bits por sample (Edit\Preferences\Quality\Sampling) </li>
-</ul><p>Por otro lado, cada uno de estos datos de entrenamiento necesitan una transcripción (.lab), esta transcripción debe contener los fonemas que se utilizan en la palabra grabada. </p>
+</ul><p>Por otro lado, cada uno de estos datos de entrenamiento puede o no tener una transcripción (.lab con el mismo nombre, ejemplo uno.lab), esta transcripción debe contener las palabras que se dicen en la grabación. En caso de no tener, se asumirá que se dijo lo que el wav indique en su nombre, por ejemplo, uno.wav sin uno.lab implica que en uno.wav solo se dijo "UNO" </p>
+<p>
+Ejemplo de carpeta sin transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train1?at=master">train1</a>
+<br/>
+Ejemplo de carpeta con transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a>
+</p>
 
-<p>En vez de hacerlo manualmente, aprovecharemos un script que se encargará de facilitarnos ese trabajo, pero en caso de no tener este script, habría que construirlos manualmente con la pinta:</p>
-
-<includecode name="Data/Train/train1-ocho.lab"></includecode>
-
-
-<p>El script que utilizaremos es <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/labels_from_wavs_script.rb?at=master">Helpers/labels_from_wavs_script.rb</a></p>
-
-<pre><code>sudo gem install waveinfo
-Helpers/labels_from_wavs_script.rb "Data/Recorded/waves/train/" "Data/Train/"
-</code></pre>
-
-<p>Este script escanea la carpeta de origen (Data/Recorded/waves/train) en búsqueda de subcarpetas que contengan wavs. Al encontrarlos, genera un archivo .lab por cada .wav (si no existe previamente en la carpeta de origen) y los guarda en el la carpeta de destino (segundo parametro) "Data/Train/" con el nombre "subcarpeta"-"nombre".lab (ejemplo el archivo train1-ocho.lab mostrado anteriormente).
-Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a> por ejemplo) el script copia estas transcripciones agregándoles en el nombre, el prefijo de la subcarpeta correspondiente. Se puede ver un ejemplo de este caso en <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Train/train5-siete.lab?at=master">Data/Train/train5-siete</a>, notar que el .lab no fue generado automaticamente sino copiado de la carpeta train5. </p>
+Este último punto se comprenderá mejor al momento de crear los MLFs.
 
 <h2>2. Combinando los datos</h2>
 
@@ -303,8 +296,7 @@ Si existía un .lab en alguna de las subcarpetas del origen (ver <a href="https:
 
 <p>Además, debemos agregar al diccionario <code>Dictionary/phones.dict</code> las siguientes lineas (manteniendo el orden alfabético)</p>
 
-<pre><code>
-SENT-END []   sil
+<pre><code>SENT-END []   sil
 SENT-START [] sil
 SIL           sil
 </code></pre>
@@ -350,15 +342,23 @@ SIL           sil
 <p>Primero, generaremos un archivo de configuración con la siguiente pinta:</p>
 
 <includecode name="Configs/HLEd.config"></includecode>
+<p>
+  <code>Ex</code> indica que deben expandirse las palabras por sus fonemas (busca en el diccionario)<br/>
+  <code>IS sil sil</code> indica que debe encerrar a cada palabra entre silencios (así entrena los cortes de palabras)<br/>
+  <code>ME sil sil sil</code> indica que debe mergearse dos "sil" seguidos (cuestión de prolijidad)<br/>
+
+ Para más información, chequear el manual de HTK.
+</p>
 
 <p>Y luego, el comando propiamente dicho: </p>
 
-<pre><code>HLEd -l '*' -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data/train-words.mlf
+<pre><code>
+HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data/train-words.mlf
 </code></pre>
 
 <p>Que genera un archivo de la pinta:</p>
 
-<includecode name="Data/train-phones.mlf"></includecode>
+<includecode data-lines="20" name="Data/train-phones.mlf"></includecode>
 
 <h3>2.4. Mel Frequency Cepstral Coefficients (MFCCs)</h3>
 
