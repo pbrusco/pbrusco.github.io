@@ -36,6 +36,7 @@
           var name = $(this).attr('name');
           var elem = $(this)
           var full = $(this).data('show-all');
+          var lines = $(this).data('lines');
           $.ajax({                                                                                      
             url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/master/Spikes/digitos/"+name,  
             dataType: 'jsonp',                                                                          
@@ -46,7 +47,12 @@
               }
 
               if (!full){
-                var text = take_lines(20,data);
+                if(lines != null){
+                  var take = parseInt(lines)
+                }else{
+                  var take = 20;
+                }
+                var text = take_lines(take,data);
               }else{
                 var text = data;
               }
@@ -309,7 +315,6 @@ SIL           sil
 <p>Y también, agregaremos al archivo <code>Dictionary/phones.list</code>, las siguiente lineas </p>
 
 <pre><code>sil
-sp
 </code></pre>
 
 <p>para formar: </p>
@@ -321,12 +326,14 @@ sp
 
 <pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet 
 </code></pre>
+<br/>
 
-<p>Aclaración: Este comando es el único que no logré hacer funcionar en Mac OS X, así que opté por correrlo en Ubuntu donde no hubo problemas. </p>
+<p> 
+<span class="red">Aclaración: </span>Este comando es el único que no logré hacer funcionar en Mac OS X, así que opté por correrlo en Ubuntu donde no hubo problemas. Chequear que se genera el archivo grammar.wordnet con contenido. </p>
 
 <h3>2.3. Master label files (mlf)</h3>
 
-<p>A continuación crearemos una version "naive" de un master label file, y digo "naive" porque no explota el verdadero poder de estos archivos, que permiten, entre otras cosas, una organización más inteligente de labels y grabaciones de entrenamiento. </p>
+<p>A continuación crearemos una version de un master label file, que permiten, entre otras cosas, una organización más inteligente de transcripciones (labels). </p>
 
 <p>Primero, crearemos el archivo "train-words.mlf"</p>
 
@@ -334,9 +341,9 @@ sp
 </code></pre>
 
 <p>Esto genera un archivo de la pinta</p>
-<includecode name="Data/train-words.mlf"></includecode>
+<includecode data-lines="40" name="Data/train-words.mlf"></includecode>
 
-<p>Luego asegurarse que cada elemento contenga la transcripción a nivel palabras de lo que cada .wav contiene (el script lo hace en base al nombre del archivo). </p>
+<p>Este script, genera transcripciones genericas para los archivos grabados con nombre "cero.wav", "uno.wav" etc, y genera transcripciones especificas si en la carpeta de grabación se encuentra un ".lab" con el nombre del archivo (por ejemplo, ver caso de la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a>) </p>
 
 <p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando <code>HLEd</code></p>
 
