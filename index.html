@@ -31,6 +31,14 @@
         }
         return text;
       }
+      function render_links(){
+   
+        $( "linkto").each(function(code)){
+          var name = $(this).attr('name');
+          $(this).replaceWith('<a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a>');
+        });
+
+      }
       function render_extern_code(){
         $( "includecode" ).each(function( code ) {
           var name = $(this).attr('name');
@@ -68,7 +76,7 @@
         $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true, extendPage: false});
         //Calls the tocify method on your HTML div.
         $("#toc").affix({offset: 300});
-       
+        render_links();
         render_extern_code();
        });
     </script>
@@ -364,7 +372,7 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 
 <p>Para traducir los .wav al formato de features que utilizaremos (MFCCs), vamos a usar el comando <em>HCopy</em></p>
 
-<p>Primero, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, generalmente, de listados de archivos que los comandos luego recorrerán y tomarán como input. </p>
+<p>Primero, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, de listados o tablas de archivos que los comandos luego recorrerán y tomarán como input. </p>
 
 <p>Por ejemplo, antes de correr el comando HCopy, utilizaremos el siguiente comando</p>
 
@@ -394,11 +402,12 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 
 <includecode data-show-all="true" name="Models/prototype"></includecode>
 
+<p>El archivo anterior es la representación de un HMM con topología "left-right". Esta topología se utiliza para reconocimiento de palabras ya que poseen propiedades que lo hacen adecuado, pero en otros casos, podríamos utilizar un prototipo "ergódico" por ejemplo.</p>
 <p>Luego, necesitamos un archivo de configuración para el comando que utilizaremos:</p>
 
 <includecode name="Configs/HCompV.config"></includecode>
 
-<p>Y un listado correspondiente para este archivo</p>
+<p>Y un script correspondiente para este archivo</p>
 
 <pre><code>Helpers/generate_hcompv_script.rb
 </code></pre>
@@ -410,11 +419,11 @@ HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data
 <pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
 </code></pre>
 
-<p>Esto genera 2 archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a> que nos serán utiles en el próximo paso.</p>
+<p>Esto genera 2 archivos <linkto name 'Models/hmm0/prototype'></linkto> y <linkto name 'Models/hmm0/vFloors'></linkto> que nos serán utiles en el próximo paso.</p>
 
 <h3>2.6. Generación del primer modelo</h3>
 
-<p>Una vez que tenemos los archivos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/prototype?at=master">Models/hmm0/prototype</a> y <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Models/hmm0/vFloors?at=master">Models/hmm0/vFloors</a>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
+<p>Una vez que tenemos los archivos <linkto name 'Models/hmm0/prototype'></linkto> y <linkto name 'Models/hmm0/vFloors'></linkto>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
 
 <p>Para lograrlo, podemos utilizar el script de bash: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers/create_hmm_defs.sh?at=master">Helpers/create_hmm_defs.sh</a></p>
 
