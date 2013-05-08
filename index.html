@@ -566,7 +566,7 @@ HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 100
 
 <p>Y finalmente, probemos el ultimo modelo del que disponemos, en el caso de este tutorial es el 7.</p>
 
-<pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -l ’*’ -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones.list
+<pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones.list
 </code></pre>
 
 <p>Que genera un archivo llamado recout.mlf que contiene los resultados de las pruebas en formato MLF.</p>
