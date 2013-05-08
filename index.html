@@ -456,6 +456,7 @@ HMMPrototipo
 
 <p>Nombre del archivo: <linkto name="Models/hmm0/hmmdefs"></linkto></p>
 
+
 <p>Finalmente, copiaremos el archivo Models/hmm0/vFloors a uno nuevo llamado macro agregando el siguiente header: </p>
 
 <pre><code>~o
@@ -465,33 +466,35 @@ HMMPrototipo
 
 <p>Nombre del archivo: <linkto name="Models/hmm0/macros"></linkto></p>
 
+<p>Para lo anterior, también podemos utilizar un script de bash: <linkto name="Helpers/create_macros.sh"></linkto></p>
+
+  <pre><code>Helpers/create_macros.sh</pre></code>
+
 <h2>3. Entrenamiento del modelo</h2>
 
-<h3>3.1. Hmm1 - Hmm3</h3>
+<h3>3.1. Primeros pasos</h3>
 
-<p>Ahora si, ya tenemos un modelo prototípico del cual partir. Como hicimos anteriormente, generamos el listado necesario para el comando que utilizaremos, en este caso, HERest</p>
+<p>Ahora si, ya tenemos un modelo prototípico del cual partir. Como hicimos anteriormente, generamos el listado necesario para el comando que utilizaremos, en este caso, <code>HERest</code> que básicamente, se encarga de re-entrenar el modelo a partir de modelos anteriores.</p>
 
 <pre><code>Helpers/generate_herest_script.rb
 </code></pre>
 
-<p>Ahora, re-estimaremos el modelo usando la herramienta para "embedded re-estimation" HERest</p>
+<p>Por ejemplo, si queremos re-estimar 3 veces luego de generar el primer modelo, podemos correr: </p>
 
-<pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
-HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
-HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
+<pre><code>HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
+
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
+
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
 </code></pre>
 
-<h3>3.2. Hmm4 - Hmm7</h3>
+Hasta este punto, generamos el modelo <linkto name="Models/hmm3"></linkto>. 
 
-<p>En este paso, debemos agregar el estado "sp" en una copia de hmmdefs de hmm3 y guardarlo en hmm4. Para agregar el estado, hacer lo siguiente:
-<a href="http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7">agregar sp</a></p>
 
-<p>Luego del reemplazo, corremos:</p>
+<h3>3.2. Generando mixtures de gausianas</h3>
 
-<pre><code>HHEd -A -D -T 1 -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Configs/HHEd.config Dictionary/phones.list
-</code></pre>
+<p>En este punto, mejoraremos el modelo para las distribuciones probabilisticas que contiene cada estado deje de ser una gausianna y pase a ser un mixture de gaussianas, en <a href="http://www.comp.nus.edu.sg/~simkc/slides/lecture03.pdf">este link</a> hay una muy buena explicación del tema</p>
 
-<p>Cuando se agrego el nuevo estado, seguimos re-estimando con:</p>
 
 <pre><code>HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm5/macros -H Models/hmm5/hmmdefs -M Models/hmm6 Dictionary/phones.list
 HERest -T 1 -C Configs/HERest.config -I Data/train-phones.mlf -t 1000.0 1000.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones.list
