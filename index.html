@@ -36,7 +36,7 @@
         $("linkto").each(
             (function(code){
               var name = $(this).attr('name');
-              $(this).replaceWith('<a target="_blank" href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master">'+name+'</a>');
+              $(this).replaceWith('<a target="_blank" href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+'">'+name+'</a>');
             }
           ));
 
@@ -52,7 +52,7 @@
             dataType: 'jsonp',                                                                          
             success: function(data){  
               if(data.substring(0, 15) == "<!DOCTYPE html>"){
-                elem.replaceWith('<pre class="error"><code>Error obteniendo: </br> https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master <p class="blue">Por favor contactame para que lo arregle:  pbrusco@manas.com.ar</p>');
+                elem.replaceWith('<pre class="error"><code>Error obteniendo: </br> https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+' <p class="blue">Por favor contactame para que lo arregle:  pbrusco@manas.com.ar</p>');
                 return;
               }
 
@@ -67,7 +67,7 @@
                 var text = data;
               }
               var escaped = $('<div/>').text(text).html();
-              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/'+name+'?at=master" target="_blank">'+name+'</a></p>');
+              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+'" target="_blank">'+name+'</a></p>');
             }                                                                                           
           });
         });
@@ -122,7 +122,7 @@
 
 <p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9 utilizando un subconjunto de las posiblidades que brinda HTK. </p>
 
-<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos?at=master">repositorio.</a></p>
+<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos">repositorio.</a></p>
 
 <h3>Hacia dónde vamos?</h3>
 
@@ -206,9 +206,9 @@ sudo apt-get install libx11-dev:i386
 
 <p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
 
-<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/code_organization.txt?at=master">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
 
-<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/create_structure.sh">create_structure.sh</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Helpers?at=master">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./create_structure.sh</code>.</p>
+<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/create_structure.sh">create_structure.sh</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Helpers">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./create_structure.sh</code>.</p>
 
 <p>Recomiendo también, utilizar un buen sistema de control de versiones (git, hg, svn, etc) para hacer commits ante cada paso logrado y así estar más preparados ante un olvido o un error en el proceso. </p>
 
@@ -282,9 +282,9 @@ sudo apt-get install libx11-dev:i386
 <li>16 bits por sample (Edit\Preferences\Quality\Sampling) </li>
 </ul><p>Por otro lado, cada uno de estos datos de entrenamiento puede o no tener una transcripción (.lab con el mismo nombre, ejemplo uno.lab), esta transcripción debe contener las palabras que se dicen en la grabación. En caso de no tener, se asumirá que se dijo lo que el wav indique en su nombre, por ejemplo, uno.wav sin uno.lab implica que en uno.wav solo se dijo "UNO" </p>
 <p>
-Ejemplo de carpeta sin transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train1?at=master">train1</a>
+Ejemplo de carpeta sin transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train1">train1</a>
 <br/>
-Ejemplo de carpeta con transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a>
+Ejemplo de carpeta con transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train5">train5</a>
 </p>
 
 Este último punto se comprenderá mejor al momento de crear los MLFs.
@@ -345,7 +345,7 @@ SIL           sil
 <p>Esto genera un archivo de la pinta</p>
 <includecode data-lines="40" name="Data/train-words.mlf"></includecode>
 
-<p>Este script, genera transcripciones genericas para los archivos grabados con nombre "cero.wav", "uno.wav" etc, y genera transcripciones especificas si en la carpeta de grabación se encuentra un ".lab" con el nombre del archivo (por ejemplo, ver caso de la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/master/Spikes/digitos/Data/Recorded/waves/train/train5?at=master">train5</a>) </p>
+<p>Este script, genera transcripciones genericas para los archivos grabados con nombre "cero.wav", "uno.wav" etc, y genera transcripciones especificas si en la carpeta de grabación se encuentra un ".lab" con el nombre del archivo (por ejemplo, ver caso de la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train5">train5</a>) </p>
 
 <p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando <code>HLEd</code></p>
 
