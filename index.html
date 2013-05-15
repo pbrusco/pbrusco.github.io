@@ -48,7 +48,7 @@
           var full = $(this).data('show-all');
           var lines = $(this).data('lines');
           $.ajax({                                                                                      
-            url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/master/Spikes/digitos/"+name,  
+            url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/htk-tutorial/Spikes/digitos/"+name,  
             dataType: 'jsonp',                                                                          
             success: function(data){  
               if(data.substring(0, 15) == "<!DOCTYPE html>"){
