@@ -324,13 +324,15 @@ Este último punto se comprenderá mejor al momento de crear los MLFs.
 
 <p>Además, debemos agregar al diccionario <code>Dictionary/phones.dict</code> las siguientes lineas (manteniendo el orden alfabético)</p>
 
-<pre><code>SENT-END []   sil
-SENT-START [] sil
-SIL           sil
+<pre><code>SENT-END      []   sil
+SENT-START    [] sil
+SIL           []  sil
 </code></pre>
 
 <p>quedando finalmente</p>
 <includecode name="Dictionary/phones.dict"></includecode>
+
+<p> Un detalle importante es el agregado de "[]" en algunas de las lineas, esto implica que no se imprimirán en el resultado. Más en general, permite especificar que cadena imprimir ante la aparición de la palabra. Por ejemplo, <code>CERO [unCero] c e r o</code> haría que en el resultado aparezca unCero cada vez que encontró un cero.</p>
 
 <p>Y también, agregaremos al archivo <code>Dictionary/phones.list</code>, las siguiente lineas </p>
 
@@ -560,7 +562,7 @@ HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 100
 
 <p>Que genera un archivo de la pinta</p>
 
-<includecode name="Scripts/HCopyTests.script"></includecode>
+<includecode data-lines="5" name="Scripts/HCopyTests.script"></includecode>
 
 <p>Luego, generar el archivo de configuración:</p>
 
