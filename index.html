@@ -72,6 +72,15 @@
           });
         });
       }
+
+      function show_or_hide_toc(){
+        if($(window).width() < 1200) {
+          $('#toc').hide();
+        }
+        else{
+          $('#toc').show();
+        }
+      }
     </script>
     <script>
       $(function() {
@@ -80,7 +89,15 @@
         $("#toc").affix({offset: 300});
         render_links();
         render_extern_code();
+        show_or_hide_toc();
+        $(window).on({
+          "resize": function(){
+            show_or_hide_toc();
+          }
+         });
        });
+
+
     </script>
 
     <div id="fb-root"></div>
@@ -113,6 +130,7 @@
     <!-- MAIN CONTENT -->
 
     <div id="main_content_wrap" class="outer">
+      
       <div id="toc"></div>
       <section id="main_content" class="inner">
         <h1 style="margin-top:0px !important">Bienvenidos</h1>
