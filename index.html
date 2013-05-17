@@ -525,6 +525,8 @@ Entonces, en este momento modificaremos el modelo para generar mixtures, para el
 
 <includecode name="Configs/HHEdIncrementMixtures.conf"></includecode>
 
+<p>En este archivo se está indicando que debemos transformar los estados intermedios de los modelos (2 a 4) para que contengan 2 mixtures en vez de una gaussiana simple</p>
+
 <p>Y luego, podemos correr el comando de generación de mixtures: </p>
 
 <pre><code>mkdir Models/hmm4
@@ -545,7 +547,7 @@ HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 100
 
 <p> Finalmente tenemos el 7mo modelo: <linkto name="Models/hmm7"></linkto> que es el que utilizaremos para hacer pruebas.</p>
 
-<p><strong>Hasta aquí</strong> llegará el entrenamiento, sin embargo, se puede seguir indefinidamente, incrementando mixtures, agregando otros n-gramas, etc. En el tutorial de HTK existen más pasos que permiten seguir entrenando el modelo para conseguir mejor performance. </p>
+<p><strong>Hasta aquí</strong> llegará el entrenamiento, sin embargo, se puede seguir indefinidamente, incrementando mixtures, agregando otros features como n-gramas, agregar short pauses (sp), etc. En el tutorial de HTK existen más pasos que permiten seguir entrenando el modelo para conseguir mejor performance. </p>
 
 <h2>4. Resultados</h2>
 
