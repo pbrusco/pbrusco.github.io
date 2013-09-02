@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Reconocimiento de Dígitos en Castellano utilizando HTK : htk, reconocimiento de dígitos, español, castellano, speech-recognition, machine learning" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/bootstrap.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/jquery.tocify.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/custom.css">
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="javascripts/jquery.tocify.min.js"></script>
+    <script src="javascripts/bootstrap.js"></script>
+    <script>
+      function take_lines(number, data){
+        var arr = data.split('\n');
+        var text = "";
+        for (var i = 0; i < arr.length; i++) {
+          if (i<number){
+            text = text + arr[i] + "\n";
+          }else{
+            text = text + "...";
+            break;
+          }
+        }
+        return text;
+      }
+      function render_links(){
+
+        $("linkto").each(
+            (function(code){
+              var name = $(this).attr('name');
+              $(this).replaceWith('<a target="_blank" href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+'">'+name+'</a>');
+            }
+          ));
+
+      }
+      function render_extern_code(){
+        $( "includecode" ).each(function( code ) {
+          var name = $(this).attr('name');
+          var elem = $(this)
+          var full = $(this).data('show-all');
+          var lines = $(this).data('lines');
+          $.ajax({
+            url: "http://jsonpify.heroku.com?resource=https://bitbucket.org/pbrusco/tesis-proyectos/raw/htk-tutorial/Spikes/digitos/"+name,
+            dataType: 'jsonp',
+            success: function(data){
+              if(data.substring(0, 15) == "<!DOCTYPE html>"){
+                elem.replaceWith('<pre class="error"><code>Error obteniendo: </br> https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+' <p class="blue">Por favor contactame para que lo arregle:  pbrusco@manas.com.ar</p>');
+                return;
+              }
+
+              if (!full){
+                if(lines != null){
+                  var take = parseInt(lines)
+                }else{
+                  var take = 20;
+                }
+                var text = take_lines(take,data);
+              }else{
+                var text = data;
+              }
+              var escaped = $('<div/>').text(text).html();
+              elem.replaceWith('<pre><code>'+ escaped + '</code></pre> <p>Nombre del archivo: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/'+name+'" target="_blank">'+name+'</a></p>');
+            }
+          });
+        });
+      }
+
+      function show_or_hide_toc(){
+        if($(window).width() < 1200) {
+          $('#toc').hide();
+        }
+        else{
+          $('#toc').show();
+        }
+      }
+    </script>
+    <script>
+      $(function() {
+        $("#toc").tocify({ selectors: "h1,h2,h3", showAndHide: true, extendPage: false});
+        //Calls the tocify method on your HTML div.
+        $("#toc").affix({offset: 300});
+        render_links();
+        render_extern_code();
+        show_or_hide_toc();
+        $(window).on({
+          "resize": function(){
+            show_or_hide_toc();
+          }
+         });
+       });
+
+
+    </script>
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=182474068506880";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    <title>Reconocimiento de Dígitos en Castellano utilizando HTK</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://pbrusco.github.io">pbrusco</a>
+
+          <h2 id="project_title">Reconocimiento de Dígitos en Castellano utilizando HTK</h2>
+          <br/><span id="project_tagline">htk, reconocimiento de dígitos, español, castellano, speech-recognition, machine learning</span>
+
+
+        </header>
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div id="main_content_wrap" class="outer">
+
+      <div id="toc"></div>
+      <section id="main_content" class="inner">
+        <h1 style="margin-top:0px !important">Bienvenidos</h1>
+
+
+<p>A continuación implementaremos un (simple) reconocedor de dígitos en español, más precisamente el español hablado en Argentina. Para ello utilizaremos HTK (una implementación de <a href="http://es.wikipedia.org/wiki/Modelo_oculto_de_M%C3%A1rkov">Modelos Ocultos de Markov</a>) y seguiremos los pasos recomendados en el <a href="http://htk.eng.cam.ac.uk/docs/docs.shtml">manual de HTK</a>.</p>
+
+<p>La idea de este tutorial es que contenga todas las herramientas necesarias para implementar <strong>desde cero</strong> un programa que reconozca los números del 0 al 9 utilizando un subconjunto de las posiblidades que brinda HTK. </p>
+
+<p>Pueden ver el código completo en este <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos">repositorio.</a></p>
+
+<h3>Hacia dónde vamos?</h3>
+
+<p>Queremos, a partir de grabaciones de entrada de la pinta:</p>
+
+<p><strong>Entrada</strong>
+ <img src="https://dl.dropboxusercontent.com/u/43547597/Tutorial%20HTK/12151516790.png" alt="12151516790"></p>
+
+<p>obtener la transcripción de los dígitos, por ejemplo</p>
+
+<p><strong>Salida</strong>
+<pre>
+0 t1 UNO
+t1 t2 DOS
+t2 t3 UNO
+t3 t4 CINCO
+t4 t5 UNO
+t5 t6 CINCO
+t6 t7 UNO
+t7 t8 SEIS
+t8 t9 SIETE
+t9 t10 NUEVE
+t10 t11 CERO
+</pre>
+</p>
+
+<h2>Preámbulos</h2>
+
+<p>La tarea de reconocimiento del habla (speech recognition) es una tarea difícil. La mayor dificultad está en la enorme cantidad de variaciones al analizar una palabra dicha por dos personas distintas, a través de dos canales distintos (estudio radial vs. teléfono), en situaciones distintas, con distintas emociones, por dos personas que hablan el mismo idioma pero de distintos orígenes, etc. E incluso, una misma persona intentando reproducir lo que dijo, nunca puede hacerlo exactamente igual. </p>
+
+<p>Esto implica, que la tarea de hacer que una maquina reconozca el habla incluye facilitarle datos de entrenamiento suficientes y buenos algoritmos para normalizar la señal acústica. </p>
+
+<p>Algunos de los métodos más utilizados en los últimos años están basados en "Hidden Markov Models" (HMMs), modelos formales probabilísticos que hablan sobre probabilidades de, por ejemplo, que cierto fonema sea dicho de una u otra manera, o que luego de cierta parte de un fonema continúe alguna otra parte, etc.
+Luego, se combina esta técnica con otras como una que permite normalizar las señales sonoras extrayendo su esencia, una de las técnicas más utilizadas es la que consta de extraer los llamados <a href="http://es.wikipedia.org/wiki/MFCC">Mel Frecuency Ceptral Coefficients (MFCCs)</a> y luego, por ejemplo, utilizando <a href="http://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model">Gaussian Mixture Models (GMMs)</a>, se consigue finalmente que se pueda comparar palabras habladas a pesar de sus variaciones esperables. </p>
+
+<p>Existen varios sistemas (o toolkits) que implementan y facilitan la interacción y entrenamiento de HMMs. En este tutorial utilizaremos <a href="http://htk.eng.cam.ac.uk">The Hidden Markov Model Toolkit (HTK)</a>. </p>
+
+<h2>Preparando el entorno</h2>
+
+<h3>Software</h3>
+
+<p>La forma de instalar el software necesario depende de nuestro sistema operativo, aquí mostraremos como lograrlo en Ubuntu y Mac OS X.</p>
+
+<p>Para poder generar nuestro reconocedor, primero debemos descargar <a href="http://htk.eng.cam.ac.uk/download.shtml">HTK</a>, luego, dentro de la carpeta descargada: </p>
+
+<pre><code> ./configure
+make all
+sudo make install
+</code></pre>
+
+<p><strong>HTK en Ubuntu</strong></p>
+
+<p>Ante algún problema, ejecutar:</p>
+
+<pre><code>sudo apt-get install gcc-multilib
+sudo apt-get install libx11-dev
+./configure --disable-hslab (por un error -lX11)
+sudo apt-get install libc6-dev-i386
+sudo apt-get install libx11-dev:i386
+</code></pre>
+
+<p>(si fue necesario realizar el ultimo paso, no dispondremos de la herramienta HSLab, reemplazable por, por ejemplo, audacity)</p>
+
+<p><strong>HTK en MAC (Mountain Lion)</strong></p>
+
+<p>Ante algún problema, asegurarse de tener instalado:</p>
+
+<ul>
+<li>
+<a href="http://xquartz.macosforge.org/landing/">XQuartz</a> (del cual necesitamos X11)</li>
+<li>gcc, disponible con los <a href="http://www.programadorfreelanceargentina.com/2012/05/como-instalar-xcode-command-line-tools.html">Command Line Tools</a> de XCode </li>
+</ul><p>Si el problema persiste, agregar <code>-I/usr/X11R6/include</code> en los cflags de los makefiles que estan, en el directorio de htk y en htklib, (información sacada de esta <a href="http://aidiary.hatenablog.com/entry/20130113/1358046622">página</a>, para leerla, traducir usando el traductor de google por ejemplo y tener cuidado que los comandos también se traducen). </p>
+
+<p><strong>Ruby</strong></p>
+
+<p>Además de HTK, recomiendo tener instalado <a href="http://www.ruby-lang.org/es/downloads/">Ruby</a> (para ciertos scripts .rb) y <a href="http://rubygems.org/pages/download">RubyGems</a></p>
+
+<p><strong>Aclaración importante</strong> Todos los scripts hechos en ruby, son simplemente automatizaciones de procesos que se pueden hacer tranquilamente a mano e incluso, la mayoría necesitan de un simple editor de texto. Recomiendo intentar realizar a mano el proceso antes (o incluso después) de correr los .rb para entender que funcionalidad aplican.</p>
+
+<h3>Organización del código</h3>
+
+<p>Para lograr hacer funcionar el programa, deberemos fijar la ubicación de cada uno de los archivos que creemos, recomiendo utilizar la misma estructura que yo utilizo ya que los comandos están preparados para estas rutas. Por supuesto, al ir entendiendo cada uno de los comandos y scripts, los archivos podrán ser movidos a donde el que los utilice considere.</p>
+
+<p><a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/code_organization.txt">Aquí</a> podrán encontrar una posible organización y es en la cual me basaré a partir de ahora. La idea no es intentar entenderla desde un principio, sino consultarla cuando se tiene alguna duda. </p>
+
+<p>Les dejo también un script para crear la estructura troncal en cualquier sistema con Unix que contiene los scripts de ruby que utilizaremos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/create_structure.sh">create_structure.sh</a> y luego llenar la carpeta Helpers con los estos <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Helpers">archivos</a>. La forma de correrlo es, copiando el contenido del archivo en una consola, o, al bajar el archivo, ejecutar <code>./create_structure.sh</code>.</p>
+
+<p>Recomiendo también, utilizar un buen sistema de control de versiones (git, hg, svn, etc) para hacer commits ante cada paso logrado y así estar más preparados ante un olvido o un error en el proceso. </p>
+
+<p>Listo, con la estructura creada, podemos empezar a trabajar en nuestro reconocedor.</p>
+
+<h3>Sobre el formato de los archivos</h3>
+
+<p>Una aclaración que puede ahorrarles horas de errores incomprensibles. En <strong>TODOS</strong> los archivos que se utilicen en los comandos de HTK, chequeen que siempre haya un "enter" al final (y que se encuentre en formato unix, opción disponible si usan <a href="http://www.sublimetext.com/">Sublime</a> en View - Line Endings - Unix por ejemplo)</p>
+
+<h1>Implementación</h1>
+
+<h2>0. Idea general</h2>
+
+<p>La implementación de este reconocedor constará de 4 pasos esenciales:</p>
+
+<ul>
+<li>Preparación de datos</li>
+<li>Combinación de datos</li>
+<li>Entrenamiento del modelo</li>
+<li>Generación de resultados</li>
+</ul><p>En los primeros dos pasos, generaremos los archivos necesarios para definir que tipo y de que manera reconoceremos palabras en el sistema (gramática, diccionario, listados de palabras). Luego, grabaremos el audio necesario para el entrenamiento y lo convertiremos a un formato aceptable para los modelos (de .wav a MFCCs) mientras preparamos un modelo prototipo que utilizaremos en los siguientes pasos.</p>
+
+<p>En el tercer paso, nos concentraremos en entrenar y pulir los modelos que van a servir para reconocer las grabaciones de prueba, es decir, entrenar los HMMs puliendo las distribuciones probabilísticas asociadas a los distintos estados. </p>
+
+<p>Finalmente, en el cuarto paso, grabaremos datos de prueba y los utilizaremos para ver que tan buena fue nuestra aproximación a lo que uno espera de un reconocedor de palabras.</p>
+
+<h2>1. Preparando los datos</h2>
+
+<p>En esta sección generaremos la gramática, los listados y el diccionario base para comenzar a trabajar. Por otro lado, debemos conseguir (o grabar) los archivos de audio que usaremos para entrenar al sistema. </p>
+
+<h3>1.1. Gramática</h3>
+
+<p>Para que nuestro programa entienda palabras, lo primero que debemos indicarle es que forma pueden tener las oraciones que grabemos.</p>
+
+<p>Dado que en nuestro caso queremos reconocer dígitos, lo haremos con la siguiente grámatica:</p>
+
+<includecode name="Dictionary/DictionarySources/grammar"></includecode>
+
+
+<p>Más info sobre el <a href="http://www.ee.columbia.edu/ln/LabROSA/doc/HTKBook21/node131.html">lenguaje utilizado</a></p>
+
+<p>Básicamente, se indica a través de este archivo, que las grabaciones tendrán dígitos (uno o más). </p>
+
+<h3>1.2. Listado de palabras</h3>
+
+<p>En este paso debemos listar todas las posibles palabras de nuestra gramática (ordenadas alfabeticamente). Para ello, podemos listarlas y luego aplicar el comando "sort" de unix. </p>
+
+
+<includecode name="Dictionary/DictionarySources/words-sorted.list"></includecode>
+
+<h3>1.3. Diccionario de fonemas</h3>
+
+<p>Este paso es importante e indica que fonemas utilizaremos para describir cada palabra, aquí es donde, el español hablado en España varía del hablado en Argentina, por ejemplo, la palabra "cero" puede tener las siguientes transcripciones a fonemas respectivamente.
+<code>CERO th e r o</code> o <code>CERO s e r o</code></p>
+
+<p>Por lo tanto, el diccionario tendrá la siguiente pinta:</p>
+
+<includecode name="Dictionary/DictionarySources/dict"></includecode>
+
+<h3>1.4. Grabando datos de entrenamiento</h3>
+
+<p>Para poder entrenar nuestro sistema, se necesitan grabaciones de entrenamiento, la decisión sobre que datos de entrenamiento usar implican un mejor o peor desempeño en el reconocedor. Para esta prueba en particular, se grabaron 4 sets de entrenamiento (train1, train2, train3 y train4) en dónde cada uno contiene una grabación por cada dígito (de manera aislada, es decir, solo el dígito de comienzo a fin sin silencios). </p>
+
+<p>Ejemplo: <linkto name="Data/Recorded/waves/train/train1/seis.wav"></linkto></p>
+
+<p>Para lograr compatibilidad con HTK, usaremos el siguiente formato para grabar (entre paréntesis indico donde encontrar la opción si utilizamos Audacity 2.0.3):</p>
+
+<ul>
+<li>Mono (Edit\Preferences\Devices) </li>
+<li>16 kHz sampling frequency (Edit\Preferences\Quality\Sampling) </li>
+<li>16 bits por sample (Edit\Preferences\Quality\Sampling) </li>
+</ul><p>Por otro lado, cada uno de estos datos de entrenamiento puede o no tener una transcripción (.lab con el mismo nombre, ejemplo uno.lab), esta transcripción debe contener las palabras que se dicen en la grabación. En caso de no tener, se asumirá que se dijo lo que el wav indique en su nombre, por ejemplo, uno.wav sin uno.lab implica que en uno.wav solo se dijo "UNO" </p>
+<p>
+Ejemplo de carpeta sin transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train1">train1</a>
+<br/>
+Ejemplo de carpeta con transcripciones: <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train5">train5</a>
+</p>
+
+Este último punto se comprenderá mejor al momento de crear los MLFs.
+
+<h2>2. Combinando los datos</h2>
+
+<p>En esta sección, nos concentraremos en dejar todo listo para empezar con el entrenamiento. Generaremos un diccionario y listado de fonemas, convertiremos la gramática a un formato estándar, crearemos Master Label Files, convertiremos el audio a su vector de features (MFCCs), y crearemos las carpetas necesarias para almacenar los distintos modelos que irán avanzando a medida que avance el entrenamiento. </p>
+
+<h3>2.1. Diccionario y listado de fonemas</h3>
+
+<p>Para generar el diccionario y listado de fonemas que utilizaremos más adelante, usaremos el comando HDMan de HTK: </p>
+
+<pre><code>HDMan -m -w Dictionary/DictionarySources/words-sorted.list -n Dictionary/phones.list -l dlog Dictionary/phones.dict Dictionary/DictionarySources/dict
+</code></pre>
+
+<p>Esto último, genera 2 archivos importantes: Dictionary/phones.dict y Dictionary/phones.list, y por otro lado, un log (dlog) que sirve para ver cuantas repeticiones de los fonemas se utilizan. </p>
+
+<p>Lo que ocurrió es que dict fue usado como origen para generar phones.dict, y solo se toma de él las palabras que aparecen en word-sorted.list. Es decir, sería totalmente posible tener un diccionario dict con muchas más traducciones (palabra a fonemas) como source. </p>
+
+<p>Además, debemos agregar al diccionario <code>Dictionary/phones.dict</code> las siguientes lineas (manteniendo el orden alfabético)</p>
+
+<pre><code>SENT-END      []   sil
+SENT-START    [] sil
+SIL           []  sil
+</code></pre>
+
+<p>quedando finalmente</p>
+<includecode name="Dictionary/phones.dict"></includecode>
+
+<p> Un detalle importante es el agregado de "[]" en algunas de las lineas, esto implica que no se imprimirán en el resultado. Más en general, permite especificar que cadena imprimir ante la aparición de la palabra. Por ejemplo, <code>CERO [unCero] c e r o</code> haría que en el resultado aparezca unCero cada vez que encontró un cero.</p>
+
+<p>Y también, agregaremos al archivo <code>Dictionary/phones.list</code>, las siguiente lineas </p>
+
+<pre><code>sil
+</code></pre>
+
+<p>para formar: </p>
+<includecode name="Dictionary/phones.list"></includecode>
+
+<h3>2.2. Gramática a WordNet</h3>
+
+<p>HTK utiliza un formato especial para representar la gramática, es un "word network" (red de palabras), básicamente, es una notación de bajo nivel llamada "HTK Standard Lattice Format (SLF)" en el cual, cada instancia de palabra y cada transición entre palabras esta listado explicitamente. Podemos crear esta red automaticamente utilizando el comando</p>
+
+<pre><code>HParse Dictionary/DictionarySources/grammar Dictionary/DictionarySources/grammar.wordnet
+</code></pre>
+<br/>
+
+<p>
+<span class="red">Aclaración: </span>Este comando es el único que no logré hacer funcionar en Mac OS X, así que opté por correrlo en Ubuntu donde no hubo problemas. Chequear que se genera el archivo <linkto name="Dictionary/DictionarySources/grammar.wordnet"></linkto> con contenido. </p>
+
+<h3>2.3. Master label files (mlf)</h3>
+
+<p>A continuación crearemos una version de un master label file, que permiten, entre otras cosas, una organización más inteligente de transcripciones (labels). </p>
+
+<p>Primero, crearemos el archivo "train-words.mlf"</p>
+
+<pre><code>Helpers/generate_word_mlf_from_training.rb
+</code></pre>
+
+<p>Esto genera un archivo de la pinta</p>
+<includecode data-lines="40" name="Data/train-words.mlf"></includecode>
+
+<p>Este script, genera transcripciones genericas para los archivos grabados con nombre "cero.wav", "uno.wav" etc, y genera transcripciones especificas si en la carpeta de grabación se encuentra un ".lab" con el nombre del archivo (por ejemplo, ver caso de la carpeta <a href="https://bitbucket.org/pbrusco/tesis-proyectos/src/htk-tutorial/Spikes/digitos/Data/Recorded/waves/train/train5">train5</a>) </p>
+
+<p>Luego debemos generar un archivo que contiene las transcripciones a nivel fonemas, para eso utilizaremos el comando <code>HLEd</code></p>
+
+<p>Primero, generaremos un archivo de configuración con la siguiente pinta:</p>
+
+<includecode name="Configs/HLEd.config"></includecode>
+<p>
+  <code>Ex</code> indica que deben expandirse las palabras por sus fonemas (busca en el diccionario)<br/>
+  <code>IS sil sil</code> indica que debe encerrar a cada palabra entre silencios (así entrena los cortes de palabras)<br/>
+  <code>ME sil sil sil</code> indica que debe mergearse dos "sil" seguidos (cuestión de prolijidad)<br/>
+
+ Para más información, chequear el manual de HTK.
+</p>
+
+<p>Y luego, el comando propiamente dicho: </p>
+
+<pre><code>
+HLEd -d Dictionary/phones.dict -i Data/train-phones.mlf Configs/HLEd.config Data/train-words.mlf
+</code></pre>
+
+<p>Que genera un archivo de la pinta:</p>
+
+<includecode data-lines="20" name="Data/train-phones.mlf"></includecode>
+
+<h3>2.4. Mel Frequency Cepstral Coefficients (MFCCs)</h3>
+
+<p>Para traducir los .wav al formato de features que utilizaremos (MFCCs), vamos a usar el comando <em>HCopy</em></p>
+
+<p>Primero, necesitamos generar ciertos archivos llamados <em>scripts</em> en el manual de HTK, que constan, de listados o tablas de archivos que los comandos luego recorrerán y tomarán como input. </p>
+
+<p>Por ejemplo, antes de correr el comando HCopy, utilizaremos el siguiente comando</p>
+
+<pre><code>Helpers/generate_hcopy_script.rb
+</code></pre>
+
+<p>Este comando, crea un archivo de la pinta:</p>
+
+<includecode name="Scripts/HCopy.script"></includecode>
+
+<p>Luego, necesitamos generar el archivo de configuración HCopy.config</p>
+
+<includecode name="Configs/HCopy.config"></includecode>
+
+<p>Finalmente, podemos correr HCopy para traducir de wavs a mfccs: </p>
+
+<pre><code>HCopy -T 1 -C Configs/HCopy.config -S Scripts/HCopy.script
+</code></pre>
+
+<p>Si todo salió bien, deberíamos tener la carpeta <linkto name="Data/Train"></linkto> lleno de archivos .mfc (uno por cada grabación de entrenamiento)</p>
+
+<h3>2.5. Generación de un modelo prototípico</h3>
+
+<p>Para lograr entrenar nuestro modelo, debemos partir de un modelo base que luego varíe hasta convertirse en el HMM final que utilizaremos para reconocer palabras. Este paso lo lograremos creando un modelo en Models/hmm0. </p>
+
+<p>Lo primero que hay que hacer es crear un nuevo archivo que contenga lo siguiente:</p>
+
+<includecode data-show-all="true" name="Models/prototype"></includecode>
+
+<p>El archivo anterior es la representación de un HMM con topología "left-right". Esta topología se utiliza para reconocimiento de palabras ya que poseen propiedades que lo hacen adecuado, pero en otros casos, podríamos utilizar un prototipo "ergódico" por ejemplo.</p>
+<p>Luego, necesitamos un archivo de configuración para el comando que utilizaremos:</p>
+
+<includecode name="Configs/HCompV.config"></includecode>
+
+<p>Y un script correspondiente para este archivo</p>
+
+<pre><code>mkdir Models/hmm0
+Helpers/generate_hcompv_script.rb
+</code></pre>
+
+<p>Que genera algo como: <linkto name="Scripts/HCompV.script"></linkto></p>
+
+<p>Ahora si, podemos utilizar el comando para crear nuestro primer modelo entrenado a partir de los datos</p>
+
+<pre><code>HCompV -C Configs/HCompV.config -f 0.01 -m -S Scripts/HCompV.script -M Models/hmm0 Models/prototype
+</code></pre>
+
+<p>Esto genera 2 archivos <linkto name 'Models/hmm0/prototype'></linkto> y <linkto name 'Models/hmm0/vFloors'></linkto> que nos serán utiles en el próximo paso.</p>
+
+<h3>2.6. Generación del primer modelo</h3>
+
+<p>Una vez que tenemos los archivos <linkto name 'Models/hmm0/prototype'></linkto> y <linkto name 'Models/hmm0/vFloors'></linkto>, generaremos un nuevo archivo que contenga, una copia del prototipo por cada fonema utilizado (sin sp).</p>
+
+<p>Para lograrlo, podemos utilizar el script de bash: <linkto name="Helpers/create_hmm_defs.sh"></linkto></p>
+
+  <pre><code>Helpers/create_hmm_defs.sh</pre></code>
+
+
+<p>Que lo que hace es distribuir el prototipo para cada fonema. Por ejemplo, si el prototipo tiene la forma </p>
+
+<pre><code>  ~o &lt;VecSize&gt; 39 &lt;MFCC_0_D_A&gt;
+  ~h "prototype"
+&lt;BeginHMM&gt;
+  &lt;NumStates&gt; 5
+  &lt;State&gt; 2
+  ...
+&lt;EndHMM&gt;
+</code></pre>
+
+<p>Donde llamaré HMMPrototipo a lo que esta entre &lt;BeginHMM&gt; y &lt;EndHMM&gt; incluyendo estas etiquetas</p>
+
+<p>Creará otro archivo que contenga este modelo por cada fonema que encontremos en el archivo <linkto name="Dictionary/phones.list"></linkto>:</p>
+
+<pre><code>~h "c"
+HMMPrototipo
+~h "e"
+HMMPrototipo
+...
+</code></pre>
+
+<p>Nombre del archivo: <linkto name="Models/hmm0/hmmdefs"></linkto></p>
+
+
+<p>Finalmente, copiaremos el archivo Models/hmm0/vFloors a uno nuevo llamado macro agregando el siguiente header: </p>
+
+<pre><code>~o
+&lt;STREAMINFO&gt; 1 39
+&lt;VECSIZE&gt; 39&lt;NULLD&gt;&lt;MFCC_D_A_0&gt;&lt;DIAGC&gt;
+</code></pre>
+
+<p>Nombre del archivo: <linkto name="Models/hmm0/macros"></linkto></p>
+
+<p>Para lo anterior, también podemos utilizar un script de bash: <linkto name="Helpers/create_macros.sh"></linkto></p>
+
+  <pre><code>Helpers/create_macros.sh</pre></code>
+
+<h2>3. Entrenamiento del modelo</h2>
+
+<h3>3.1. Primeros pasos</h3>
+
+<p>Ahora si, ya tenemos un modelo prototípico del cual partir. Como hicimos anteriormente, generamos el listado necesario para el comando que utilizaremos, en este caso, <code>HERest</code> que básicamente, se encarga de re-entrenar el modelo a partir de modelos anteriores.</p>
+
+<pre><code>Helpers/generate_herest_script.rb
+</code></pre>
+
+<p>Por ejemplo, si queremos re-estimar 3 veces luego de generar el primer modelo, podemos correr: </p>
+
+<pre><code>mkdir Models/hmm1
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm0/macros -H Models/hmm0/hmmdefs -M Models/hmm1 Dictionary/phones.list
+
+mkdir Models/hmm2
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm1/macros -H Models/hmm1/hmmdefs -M Models/hmm2 Dictionary/phones.list
+
+mkdir Models/hmm3
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm2/macros -H Models/hmm2/hmmdefs -M Models/hmm3 Dictionary/phones.list
+</code></pre>
+
+Hasta este punto, generamos el modelo <linkto name="Models/hmm3"></linkto>.
+
+
+<h3>3.2. Generando mixtures de gausianas</h3>
+
+<p>En este punto, mejoraremos el modelo para las distribuciones probabilisticas que contiene cada estado dejen de ser gausianas y pasen a ser mixtures de gausianas. En <a href="http://www.comp.nus.edu.sg/~simkc/slides/lecture03.pdf">este link</a> hay una muy buena explicación teórica del tema</p>
+
+<p>
+Entonces, en este momento modificaremos el modelo para generar mixtures, para ello necesitaremos el siguiente archivo de configuración:
+</p>
+
+<includecode name="Configs/HHEdIncrementMixtures.conf"></includecode>
+
+<p>En este archivo se está indicando que debemos transformar los estados intermedios de los modelos (2 a 4) para que contengan 2 mixtures en vez de una gaussiana simple</p>
+
+<p>Y luego, podemos correr el comando de generación de mixtures: </p>
+
+<pre><code>mkdir Models/hmm4
+HHEd -H Models/hmm3/macros -H Models/hmm3/hmmdefs -M Models/hmm4 Configs/HHEdIncMixs.conf Dictionary/phones.list</pre></code>
+
+<p> Que generara el 4to modelo: <linkto name="Models/hmm4"></linkto>. Este modelo ya contiene estados con distribuciones distintas a las anteriores, ahora solo falta seguir reentrenando de la misma forma en que hicimos en el paso 3.1 </p>
+
+
+<pre><code>mkdir Models/hmm5
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm4/macros -H Models/hmm4/hmmdefs -M Models/hmm5 Dictionary/phones.list
+
+mkdir Models/hmm6
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm5/macros -H Models/hmm5/hmmdefs -M Models/hmm6 Dictionary/phones.list
+
+mkdir Models/hmm7
+HERest -T 0 -C Configs/HERest.config -I Data/train-phones.mlf -t 250.0 150.0 10000.0 -S Scripts/HERest.script -H Models/hmm6/macros -H Models/hmm6/hmmdefs -M Models/hmm7 Dictionary/phones.list
+</code></pre>
+
+<p> Finalmente tenemos el 7mo modelo: <linkto name="Models/hmm7"></linkto> que es el que utilizaremos para hacer pruebas.</p>
+
+<p><strong>Hasta aquí</strong> llegará el entrenamiento, sin embargo, se puede seguir indefinidamente, incrementando mixtures, agregando otros features como n-gramas, agregar short pauses (sp), etc. En el tutorial de HTK existen más pasos que permiten seguir entrenando el modelo para conseguir mejor performance. </p>
+
+<h2>4. Resultados</h2>
+
+<h3>4.1. Grabar datos para testear</h3>
+
+<p>De la misma forma que grabamos los datos de entrenamiento (mismo formato sobre todo) grabaremos casos de prueba en la carpeta [Data/Recorded/waves/train], estos datos no necesitan transcripción, ya que esa será la salida de nuestro programa.</p>
+
+<h3>4.2. Generar vectores MFCC</h3>
+
+<p>Primero, debemos, al igual que con los datos de entrenamiento, listar los archivos de test que poseemos:</p>
+
+<pre><code>Helpers/generate_hcopy_tests_script.rb
+</code></pre>
+
+<p>Que genera un archivo de la pinta</p>
+
+<includecode data-lines="5" name="Scripts/HCopyTests.script"></includecode>
+
+<p>Luego, generar el archivo de configuración:</p>
+
+<includecode name="Configs/HCopyTests.config"></includecode>
+
+<p>Y finalmente, los MFCCs a partir de los wavs:</p>
+
+<pre><code>HCopy -T 1 -C Configs/HCopyTests.config -S Scripts/HCopyTests.script
+</code></pre>
+
+<h3>4.3. Obtención de resultados</h3>
+
+<p>Para testear contra el modelo entrenado, utilizaremos el comando <code>HVite</code>, para lo cual necesitamos el listado de archivos de entrenamiento:</p>
+
+<pre><code>Helpers/generate_hvite_script.rb
+</code></pre>
+
+<p>Este comando, crea un archivo de la pinta:</p>
+
+<includecode name="Scripts/HVite.script"></includecode>
+
+<p>Y finalmente, probemos el ultimo modelo del que disponemos, en el caso de este tutorial es el 7.</p>
+
+<pre><code>HVite -H Models/hmm7/macros -H Models/hmm7/hmmdefs -S Scripts/HVite.script -i recout.mlf -w Dictionary/DictionarySources/grammar.wordnet -p 0.0 -s 5.0 Dictionary/phones.dict Dictionary/phones.list
+</code></pre>
+
+<p>Que genera un archivo llamado recout.mlf que contiene los resultados de las pruebas en formato MLF.</p>
+
+<p>Veamos que resultados obtenemos con nuestras pruebas: </p>
+
+<includecode data-show-all="true" name="recout.mlf"></includecode>
+
+<p>Podrás mejorarlo? :)</p>
+
+<h2>5. Yapa</h2>
+Una vez que seguiste todo el tutorial y no tenes ganas de volver a hacer todo, te recomiendo usar el script <linkto name="go.sh"></linkto> que ejecuta todos los pasos contenidos en este tutorial y algunos más al final. Sirve para ejecutar todos los pasos ante nuevos datos de entrenamiento o testeo por ejemplo. Miren en código fuente y verán que no hay nada mágico.
+
+<h2>Preguntas? Comentarios?</h2>
+
+<p>Ante cualquier duda o comentario, enviar un email a <a href="mailto:pbrusco@manas.com.ar">pbrusco@manas.com.ar</a> o <a href="mailto:pablo.brusco@gmail.com">pablo.brusco@gmail.com</a></p>
+
+<p>Gracias!</p>
+<div class="fb-like" data-href="http://man.as/htk-tutorial" data-send="true" data-width="450" data-show-faces="true"></div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+
+
+  </body>
+</html>
