@@ -12,73 +12,13 @@ span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
 pre { line-height: 125%; }
 body .hll { background-color: #ffffcc }
 body  { background: #f8f8f8; }
-body .c { color: #408080; font-style: italic } /* Comment */
-body .err { border: 1px solid #FF0000 } /* Error */
-body .k { color: #008000; font-weight: bold } /* Keyword */
-body .o { color: #666666 } /* Operator */
-body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-body .cp { color: #BC7A00 } /* Comment.Preproc */
-body .c1 { color: #408080; font-style: italic } /* Comment.Single */
-body .cs { color: #408080; font-style: italic } /* Comment.Special */
-body .gd { color: #A00000 } /* Generic.Deleted */
-body .ge { font-style: italic } /* Generic.Emph */
-body .gr { color: #FF0000 } /* Generic.Error */
-body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-body .gi { color: #00A000 } /* Generic.Inserted */
-body .go { color: #888888 } /* Generic.Output */
-body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
-body .gs { font-weight: bold } /* Generic.Strong */
-body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-body .gt { color: #0044DD } /* Generic.Traceback */
-body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
-body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
-body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
-body .kp { color: #008000 } /* Keyword.Pseudo */
-body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
-body .kt { color: #B00040 } /* Keyword.Type */
-body .m { color: #666666 } /* Literal.Number */
-body .s { color: #BA2121 } /* Literal.String */
-body .na { color: #7D9029 } /* Name.Attribute */
-body .nb { color: #008000 } /* Name.Builtin */
-body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-body .no { color: #880000 } /* Name.Constant */
-body .nd { color: #AA22FF } /* Name.Decorator */
-body .ni { color: #999999; font-weight: bold } /* Name.Entity */
-body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-body .nf { color: #0000FF } /* Name.Function */
-body .nl { color: #A0A000 } /* Name.Label */
-body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
-body .nt { color: #008000; font-weight: bold } /* Name.Tag */
-body .nv { color: #19177C } /* Name.Variable */
-body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-body .w { color: #bbbbbb } /* Text.Whitespace */
-body .mf { color: #666666 } /* Literal.Number.Float */
-body .mh { color: #666666 } /* Literal.Number.Hex */
-body .mi { color: #666666 } /* Literal.Number.Integer */
-body .mo { color: #666666 } /* Literal.Number.Oct */
-body .sb { color: #BA2121 } /* Literal.String.Backtick */
-body .sc { color: #BA2121 } /* Literal.String.Char */
-body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
-body .s2 { color: #BA2121 } /* Literal.String.Double */
-body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
-body .sh { color: #BA2121 } /* Literal.String.Heredoc */
-body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
-body .sx { color: #008000 } /* Literal.String.Other */
-body .sr { color: #BB6688 } /* Literal.String.Regex */
-body .s1 { color: #BA2121 } /* Literal.String.Single */
-body .ss { color: #19177C } /* Literal.String.Symbol */
-body .bp { color: #008000 } /* Name.Builtin.Pseudo */
-body .vc { color: #19177C } /* Name.Variable.Class */
-body .vg { color: #19177C } /* Name.Variable.Global */
-body .vi { color: #19177C } /* Name.Variable.Instance */
-body .il { color: #666666 } /* Literal.Number.Integer.Long */
-
   </style>
 
   <style type="text/css">
 #wrap {
-   width:700px;
+   width:800px;
    margin:0 auto;
+   float:left;
 }
 #left_col {
    float:left;
@@ -93,16 +33,61 @@ body .il { color: #666666 } /* Literal.Number.Integer.Long */
 function presentacion()
 {
   introJs().onchange(function(elem) {
-    var data_res = elem.getAttribute("data-res");
+    var step = elem.getAttribute("data-step");
+    document.getElementById("step-" + step).setAttribute("style", "");
   }).start();
 };
 </script>
 <link rel="stylesheet" type="text/css" href="introjs.css">
 
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.hovertable {
+  font-family: verdana,arial,sans-serif;
+  font-size:11px;
+  color:#333333;
+  border-width: 1px;
+  border-color: #999999;
+  border-collapse: collapse;
+}
+table.hovertable th {
+  background-color:#c3dde0;
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+table.hovertable tr {
+  background-color:#d4e3e5;
+}
+table.hovertable td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+</style>
+<!-- Table goes in the document BODY -->
 </head>
 <body>
+<table class="hovertable" border="1" style="float:right">
+<tr><th>Paso</th><th>Receptor</th><th>Mensaje</th></tr>
+<tr id="step-1" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>1</td><td>FlexibleCounter</td><td>new: </td></tr>
+<tr id="step-2" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>2</td><td>FlexibleCounter</td><td>new </td></tr>
+<tr id="step-3" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>3</td><td>FlexibleCounter</td><td>new </td></tr>
+<tr id="step-4" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>4</td><td>aFlexibleCounterInstance</td><td>initialize: </td></tr>
+<tr id="step-5" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>5</td><td>aFlexibleCounterInstance</td><td>useBlock: </td></tr>
+<tr id="step-6" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>6</td><td>aFlexibleCounterInstance</td><td>nextIf: </td></tr>
+<tr id="step-7" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>7</td><td>true</td><td>ifTrue: ifFalse:</td></tr>
+<tr id="step-8" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>8</td><td>aFlexibleCounterInstance</td><td>next </td></tr>
+<tr id="step-9" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>9</td><td>[:v | v + 2]</td><td>value: </td></tr>
+<tr id="step-10" onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';" style="display:none"><td>10</td><td>aFlexibleCounterInstance</td><td>initialize </td></tr>
+
+
+</table>
+
 <h2></h2>
-<div id="wrap" data-intro='aCounter := FlexibleCounter new: [:v | v+2 ]. aCounter nextIf: true.' data-res="0" data-step='1' class="highlight" style="background: #f8f8f8; height:450px">
+<div id="wrap" data-intro='aCounter := FlexibleCounter new: [:v | v+2 ]. aCounter nextIf: true.' data-res="0" data-step='1' class="highlight" style="background: #f8f8f8; height:475px">
   <pre id="left_col" style="line-height: 125%"><span style="color: #880000">Object</span> subclass: <span style="color: #880000">Counter</span> <span style="color: #666666">[</span>
   <span style="color: #666666">|</span>count<span style="color: #666666">|</span> <span style="color: #BA2121">&quot;Variable de instancia&quot;</span>
 
@@ -112,7 +97,7 @@ function presentacion()
   <span style="color: #666666">]</span>
 </div>
 
-<div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='8'>
+<div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='10'>
 <div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ]. aCounter nextIf: true.' data-step='4'>
   <span style="color: #008000">initialize</span>: aValue <span style="color: #666666">[</span>
     count :<span style="color: #666666">=</span> aValue<span style="color: #666666">.</span>
@@ -128,8 +113,9 @@ function presentacion()
 
 <div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='6'>
   <span style="color: #008000">nextIf</span>: condition <span style="color: #666666">[</span>
+    <span data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='7'>
     <span style="color: #666666">^</span>condition <span style="color: #19177C">ifTrue</span>: <span style="color: #666666">[</span><span style="color: #008000">self</span> <span style="color: #008000; font-weight: bold">next</span><span style="color: #666666">]</span> <br/><span style="color: #19177C">               ifFalse</span>: <span style="color: #666666">[</span>count<span style="color: #666666">].</span>
-  <span style="color: #666666">]</span>
+  <span style="color: #666666">]</span></span>
 <span style="color: #666666">]</span>
 </div>
 </pre>
@@ -150,9 +136,10 @@ function presentacion()
   <span style="color: #666666">]</span>
 </div>
 
-<div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='7'>
+<div data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='8'>
   <span style="color: #008000; font-weight: bold">next</span> <span style="color: #666666">[</span>
-    <span style="color: #008000">self</span> <span style="color: #008000">initialize</span>: (block <span style="color: #19177C">value</span>: count)<span style="color: #666666">.</span>
+  <span data-intro='aCounter := FlexibleCounter new: [:v | v+2 ].<br/> <b>aCounter nextIf: true.</b>' data-step='9'>
+    <span style="color: #008000">self</span> <span style="color: #008000">initialize</span>: (block <span style="color: #19177C">value</span>: count)<span style="color: #666666">.</span></span>
     <span style="color: #666666">^</span>count<span style="color: #666666">.</span>
   <span style="color: #666666">]</span>
 <span style="color: #666666">]</span>
